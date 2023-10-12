@@ -2,7 +2,7 @@
 
 # TrackMate-Cellpose
 
-Goal to add our Lacss detector to the Trackmate cellpose plugin
+Goal to add Lacss detector to the Trackmate cellpose plugin
 
 https://github.com/jiyuuchc/lacss 
 
