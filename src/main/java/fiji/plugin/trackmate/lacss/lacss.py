@@ -1,17 +1,20 @@
 #pip install lacss
 
 import lacss
+from lacss.deploy import Predictor
+
+from skimage.transform import rescale
 import imageio.v2 as imageio
 
-path = #dir of files
+path = ''#dir of files
 
-model_path = #cp path to model
+model_path = '' #cp path to model
 
 
-predictor = Predictor(cp_path)
+predictor = Predictor(model_path)
 
 for file in path:
-    image = image.imread(file)
+    image = imageio.imread(file)
     img = rescale(image.astype("float32"), 2)
     img -= img.mean()
     img /= img.std()
