@@ -1,3 +1,5 @@
+#pip install lacss
+
 import lacss
 import imageio.v2 as imageio
 
@@ -17,3 +19,6 @@ for file in path:
 
     #pred = predictor.predict(img)
     pred_label = predictor.predict_label(img)
+
+
+## Probably requires a re-formmating of output
