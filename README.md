@@ -2,4 +2,7 @@
 
 # TrackMate-Cellpose
 
-Tentative Cellpose integration in TrackMate.
+Goal to add Lacss detector to the Trackmate cellpose plugin
+
+https://github.com/jiyuuchc/lacss 
+
