@@ -2,7 +2,6 @@ package fiji.plugin.trackmate.lacss;
 
 import static fiji.plugin.trackmate.detection.DetectorKeys.DEFAULT_TARGET_CHANNEL;
 import static fiji.plugin.trackmate.detection.DetectorKeys.KEY_TARGET_CHANNEL;
-import static fiji.plugin.trackmate.detection.ThresholdDetectorFactory.KEY_SIMPLIFY_CONTOURS;
 import static fiji.plugin.trackmate.io.IOUtils.readBooleanAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readDoubleAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readIntegerAttribute;
@@ -53,7 +52,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 */
 	public static final String KEY_LACSS_MODEL = "LACSS_MODEL";
 
-	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.CYTO;
+	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.LiveCell;
 
 	/**
 	 * The key to the parameter that stores the path to the Python instance that
@@ -64,7 +63,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 */
 	public static final String KEY_LACSS_PYTHON_FILEPATH = "LACSS_PYTHON_FILEPATH";
 
-	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = "/opt/anaconda3/envs/cellpose/bin/python";
+	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = "/Fiji/plugins/TrackMate/lacss/lacss.py";
 
 	/**
 	 * The key to the parameter that stores the path to the custom model file to
@@ -88,19 +87,9 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 * TrackMate wil do the conversion. Use 0 or a negative value to have
 	 * Cellpose determine this automatically (but it will take a bit longer).
 	 */
-	public static final String KEY_CELL_DIAMETER = "CELL_DIAMETER";
+	public static final String KEY_MIN_CELL_AREA = "MIN_CELL_AREA";
 
-	public static final Double DEFAULT_CELL_DIAMETER = Double.valueOf( 30. );
-
-	/**
-	 * They key to the parameter that configures whether Cellpose will try to
-	 * use GPU acceleration. For this to work, a working Cellpose with working
-	 * GPU support must be present on the system. If not, Cellpose will default
-	 * to using the CPU.
-	 */
-	public static final String KEY_USE_GPU = "USE_GPU";
-
-	public static final Boolean DEFAULT_USE_GPU = Boolean.valueOf( true );
+	public static final Double DEFAULT_MIN_CELL_AREA = Double.valueOf( 0. );
 
 	/**
 	 * The key to the parameter that stores the logger instance, to which
@@ -116,9 +105,25 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	/** The pretty name of the target detector. */
 	public static final String NAME = "Lacss detector";
 
+    /** Remove out of Label Parameter */
+	public static final String KEY_REMOVE_OUT_OF_BOUNDS = "REMOVE_OUT_OF_BOUNDS";
+	
+	public static final Boolean DEFAULT_REMOVE_OUT_OF_BOUNDS = Boolean.valueOf(false);
+
+	/** Return Label Paramater True (Full Model Prediction) False (ONLY Segmentation Label) */
+	public static final String KEY_RETURN_LABEL = "RETURN_LABEL";
+
+	public static final boolean DEFAULT_RETURN_LABEL = Boolean.valueOf(false);
+
+	/** A image scaling factor. If not 1, the input image will be resized internally before fed to the model. The results will be resized back to the scale of the orginal input image. */
+	public static final String KEY_SCALING = "SCALING";
+
+	public static final Double DEFAULT_SCALING = Double.valueOf( 1. );
+	
+
 	/** An html information text. */
 	public static final String INFO_TEXT = "<html>"
-			+ "This detector relies on cellpose to detect objects."
+			+ "This detector relies on deep-learning model Lacss to detect cells."
 			+ "<p>"
 			+ "The detector simply calls an external cellpose installation. So for this "
 			+ "to work, you must have a cellpose installation running on your computer. "
@@ -163,8 +168,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final String lacssPythonPath = ( String ) settings.get( KEY_LACSS_PYTHON_FILEPATH );
 		final PretrainedModel model = ( PretrainedModel ) settings.get( KEY_LACSS_MODEL );
 		final String customModelPath = ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH );
-		final boolean simplifyContours = ( boolean ) settings.get( KEY_SIMPLIFY_CONTOURS );
-		final boolean useGPU = ( boolean ) settings.get( KEY_USE_GPU );
+		final boolean remove_out_of_bound = ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS );
+		final boolean return_label = ( boolean ) settings.get( KEY_RETURN_LABEL );
 
 		// Channels are 0-based (0: grayscale, then R & G & B).
 		final int channel = ( Integer ) settings.get( KEY_TARGET_CHANNEL );
@@ -172,7 +177,9 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 
 		// Convert to diameter in pixels.
 		final double[] calibration = TMUtils.getSpatialCalibration( img );
-		final double diameter = ( double ) settings.get( KEY_CELL_DIAMETER ) / calibration[ 0 ];
+		final double min_cell_area = ( double ) settings.get( KEY_MIN_CELL_AREA ) / calibration[ 0 ];
+
+		final double scaling = (double) settings.get(KEY_SCALING);
 
 		final LacssSettings lacssSettings = LacssSettings.create()
 				.lacssPythonPath( lacssPythonPath )
@@ -180,9 +187,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 				.model( model )
 				.channel1( channel )
 				.channel2( channel2 )
-				.diameter( diameter )
-				.useGPU( useGPU )
-				.simplifyContours( simplifyContours )
+				.min_cell_area( min_cell_area )
+				.return_label( return_label )
+				.remove_out_of_bound( remove_out_of_bound )
+				.scaling ( scaling ) 
 				.get();
 
 		// Logger.
@@ -228,9 +236,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		ok = ok && writeAttribute( settings, element, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
-		ok = ok && writeAttribute( settings, element, KEY_CELL_DIAMETER, Double.class, errorHolder );
-		ok = ok && writeAttribute( settings, element, KEY_USE_GPU, Boolean.class, errorHolder );
-		ok = ok && writeAttribute( settings, element, KEY_SIMPLIFY_CONTOURS, Boolean.class, errorHolder );
+		ok = ok && writeAttribute( settings, element, KEY_MIN_CELL_AREA, Double.class, errorHolder );
+		ok = ok && writeAttribute( settings, element, KEY_RETURN_LABEL, Boolean.class, errorHolder );
+		ok = ok && writeAttribute( settings, element, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
+		ok = ok && writeAttribute( settings, element, KEY_SCALING, Double.class, errorHolder );
 
 		final PretrainedModel model = ( PretrainedModel ) settings.get( KEY_LACSS_MODEL );
 		element.setAttribute( KEY_LACSS_MODEL, model.name() );
@@ -251,9 +260,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		ok = ok && readStringAttribute( element, settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, errorHolder );
 		ok = ok && readIntegerAttribute( element, settings, KEY_TARGET_CHANNEL, errorHolder );
 		ok = ok && readIntegerAttribute( element, settings, KEY_OPTIONAL_CHANNEL_2, errorHolder );
-		ok = ok && readDoubleAttribute( element, settings, KEY_CELL_DIAMETER, errorHolder );
-		ok = ok && readBooleanAttribute( element, settings, KEY_USE_GPU, errorHolder );
-		ok = ok && readBooleanAttribute( element, settings, KEY_SIMPLIFY_CONTOURS, errorHolder );
+		ok = ok && readDoubleAttribute( element, settings, KEY_MIN_CELL_AREA, errorHolder );
+		ok = ok && readBooleanAttribute( element, settings, KEY_RETURN_LABEL, errorHolder );
+		ok = ok && readBooleanAttribute( element, settings, KEY_REMOVE_OUT_OF_BOUNDS, errorHolder );
+		ok = ok && readDoubleAttribute( element, settings, KEY_SCALING, errorHolder );
 
 		// Read model.
 		final String str = element.getAttributeValue( KEY_LACSS_MODEL );
@@ -281,9 +291,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		settings.put( KEY_LACSS_MODEL, DEFAULT_LACSS_MODEL );
 		settings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
 		settings.put( KEY_OPTIONAL_CHANNEL_2, DEFAULT_OPTIONAL_CHANNEL_2 );
-		settings.put( KEY_CELL_DIAMETER, DEFAULT_CELL_DIAMETER );
-		settings.put( KEY_USE_GPU, DEFAULT_USE_GPU );
-		settings.put( KEY_SIMPLIFY_CONTOURS, true );
+		settings.put( KEY_MIN_CELL_AREA, DEFAULT_MIN_CELL_AREA );
+		settings.put( KEY_RETURN_LABEL, DEFAULT_RETURN_LABEL );
+		settings.put( KEY_REMOVE_OUT_OF_BOUNDS, false );
+		settings.put( KEY_SCALING, DEFAULT_SCALING);
 		settings.put( KEY_LOGGER, Logger.DEFAULT_LOGGER );
 		settings.put( KEY_LACSS_CUSTOM_MODEL_FILEPATH, DEFAULT_LACSS_CUSTOM_MODEL_FILEPATH );
 		return settings;
@@ -296,12 +307,14 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final StringBuilder errorHolder = new StringBuilder();
 		ok = ok & checkParameter( settings, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
-		// ok = ok & checkParameter( settings, KEY_LACSS_MODEL, PretrainedModel.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_LACSS_MODEL, PretrainedModel.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_CELL_DIAMETER, Double.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_USE_GPU, Boolean.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_SIMPLIFY_CONTOURS, Boolean.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_MIN_CELL_AREA, Double.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_SCALING, Double.class, errorHolder );
+		
 
 		// If we have a logger, test it is of the right class.
 		final Object loggerObj = settings.get( KEY_LOGGER );
@@ -317,9 +330,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 				KEY_LACSS_MODEL,
 				KEY_TARGET_CHANNEL,
 				KEY_OPTIONAL_CHANNEL_2,
-				KEY_CELL_DIAMETER,
-				KEY_USE_GPU,
-				KEY_SIMPLIFY_CONTOURS );
+				KEY_MIN_CELL_AREA,
+				KEY_RETURN_LABEL,
+				KEY_REMOVE_OUT_OF_BOUNDS,
+				KEY_SCALING);
 		final List< String > optionalKeys = Arrays.asList(
 				KEY_LACSS_CUSTOM_MODEL_FILEPATH,
 				KEY_LOGGER );

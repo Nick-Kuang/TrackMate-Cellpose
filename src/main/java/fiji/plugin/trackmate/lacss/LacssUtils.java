@@ -41,7 +41,7 @@ public class LacssUtils
 
 	public static final ImageIcon logo()
 	{
-		return new ImageIcon( getResource( "images/jiyulogo.jpg" ) );
+		return new ImageIcon( getResource( "images/mimilogo.jpg" ) );
 	}
 
 	public static final ImageIcon logo64()

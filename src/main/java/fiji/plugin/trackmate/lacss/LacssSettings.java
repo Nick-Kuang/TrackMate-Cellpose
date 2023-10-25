@@ -19,11 +19,15 @@ public class LacssSettings
 
 	public final String customModelPath;
 
-	public final double diameter;
+	public final double min_cell_area;
 
-	public final boolean useGPU;
+	public final boolean remove_out_of_bound;
 
-	public final boolean simplifyContours;
+	public final double scaling;
+	
+	public final boolean return_label;
+
+
 
 
 	public LacssSettings(
@@ -32,18 +36,20 @@ public class LacssSettings
 			final String customModelPath,
 			final int chan,
 			final int chan2,
-			final double diameter,
-			final boolean useGPU,
-			final boolean simplifyContours )
+			final double min_cell_area,
+			final double scaling,
+			final boolean return_label,
+			final boolean remove_out_of_bound )
 	{
 		this.lacssPythonPath = lacssPythonPath;
 		this.model = model;
 		this.customModelPath = customModelPath;
 		this.chan = chan;
 		this.chan2 = chan2;
-		this.diameter = diameter;
-		this.useGPU = useGPU;
-		this.simplifyContours = simplifyContours;
+		this.min_cell_area = min_cell_area;
+		this.scaling = scaling;
+		this.return_label = return_label;
+		this.remove_out_of_bound = remove_out_of_bound;
 	}
 
 	public List< String > toCmdLine( final String imagesDir )
@@ -90,12 +96,12 @@ public class LacssSettings
 		}
 
 		// GPU.
-		if ( useGPU )
+		if ( return_label )
 			cmd.add( "--use_gpu" );
 
 		// Diameter.
 		cmd.add( "--diameter" );
-		cmd.add( ( diameter > 0 ) ? "" + diameter : "0" );
+		cmd.add( ( min_cell_area > 0 ) ? "" + min_cell_area : "0" );
 
 		// Model.
 		cmd.add( "--pretrained_model" );
@@ -121,19 +127,21 @@ public class LacssSettings
 	public static final class Builder
 	{
 
-		private String lacssPythonPath = "/opt/anaconda3/envs/cellpose/bin/python";
+		private String lacssPythonPath = "/Fiji/plugins/TrackMate/lacss/lacss.py";
 
 		private int chan = 0;
 
 		private int chan2 = -1;
 
-		private PretrainedModel model = PretrainedModel.CYTO;
+		private PretrainedModel model = PretrainedModel.LiveCell;
 
-		private double diameter = 30.;
+		private double min_cell_area = 0.;
+
+		private double scaling = 1.;
 		
-		private boolean useGPU = true;
+		private boolean return_label = true;
 		
-		private boolean simplifyContours = true;
+		private boolean remove_out_of_bound = false;
 
 		private String customModelPath = "";
 
@@ -161,21 +169,27 @@ public class LacssSettings
 			return this;
 		}
 
-		public Builder diameter( final double diameter )
+		public Builder min_cell_area( final double min_cell_area )
 		{
-			this.diameter = diameter;
+			this.min_cell_area = min_cell_area;
 			return this;
 		}
 
-		public Builder useGPU( final boolean useGPU )
+		public Builder scaling( final double scaling )
 		{
-			this.useGPU = useGPU;
+			this.scaling = scaling;
 			return this;
 		}
 
-		public Builder simplifyContours( final boolean simplifyContours )
+		public Builder return_label( final boolean return_label)
 		{
-			this.simplifyContours = simplifyContours;
+			this.return_label = return_label;
+			return this;
+		}
+
+		public Builder remove_out_of_bound( final boolean remove_out_of_bound )
+		{
+			this.remove_out_of_bound = remove_out_of_bound;
 			return this;
 		}
 
@@ -193,18 +207,18 @@ public class LacssSettings
 					customModelPath,
 					chan,
 					chan2,
-					diameter,
-					useGPU,
-					simplifyContours );
+					min_cell_area,
+					scaling,
+					return_label,
+					remove_out_of_bound );
 		}
 
 	}
 
 	public enum PretrainedModel
 	{
-		CYTO( "Cytoplasm", "cyto" ),
-		NUCLEI( "Nucleus", "nuclei" ),
-		CYTO2( "Cytoplasm 2.0", "cyto2" ),
+		LiveCell("LIVECell", "livecell"),
+		TissueNet("TissueNet", "tissuenet"),
 		CUSTOM( "Custom", "" );
 
 		private final String name;

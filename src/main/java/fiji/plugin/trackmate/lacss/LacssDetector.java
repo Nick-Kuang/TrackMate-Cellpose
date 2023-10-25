@@ -140,10 +140,12 @@ public class LacssDetector< T extends RealType< T > & NativeType< T > > implemen
 		 * thread -> 24.4 min - 8 thread -> 4.1 min (there is not a x8 speedup
 		 * factor, which is to be expected)
 		 */
-		if ( !lacssSettings.useGPU && IJ.isMacintosh() )
+		
+		 //if ( !lacssSettings.useGPU && IJ.isMacintosh() )
 			nConcurrentTasks = numThreads;
-		else
-			nConcurrentTasks = 1;
+		//else
+			//nConcurrentTasks = 1;
+
 
 		final List< List< ImagePlus > > timepoints = new ArrayList<>( nConcurrentTasks );
 		for ( int i = 0; i < nConcurrentTasks; i++ )
@@ -274,7 +276,7 @@ public class LacssDetector< T extends RealType< T > & NativeType< T > > implemen
 		final LabelImageDetectorFactory< ? > labeImageDetectorFactory = new LabelImageDetectorFactory<>();
 		final Map< String, Object > detectorSettings = labeImageDetectorFactory.getDefaultSettings();
 		detectorSettings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
-		detectorSettings.put( KEY_SIMPLIFY_CONTOURS, lacssSettings.simplifyContours );
+		detectorSettings.put( KEY_SIMPLIFY_CONTOURS, lacssSettings.remove_out_of_bound );
 		labelImgSettings.detectorFactory = labeImageDetectorFactory;
 		labelImgSettings.detectorSettings = detectorSettings;
 

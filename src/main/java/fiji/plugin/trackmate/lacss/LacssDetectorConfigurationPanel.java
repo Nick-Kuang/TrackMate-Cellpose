@@ -3,12 +3,13 @@ package fiji.plugin.trackmate.lacss;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_CUSTOM_MODEL_FILEPATH;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_MODEL;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_PYTHON_FILEPATH;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_CELL_DIAMETER;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_MIN_CELL_AREA;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LOGGER;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_OPTIONAL_CHANNEL_2;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_USE_GPU;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_RETURN_LABEL;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SCALING;
 import static fiji.plugin.trackmate.detection.DetectorKeys.KEY_TARGET_CHANNEL;
-import static fiji.plugin.trackmate.detection.ThresholdDetectorFactory.KEY_SIMPLIFY_CONTOURS;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_REMOVE_OUT_OF_BOUNDS;
 import static fiji.plugin.trackmate.gui.Fonts.BIG_FONT;
 import static fiji.plugin.trackmate.gui.Fonts.FONT;
 import static fiji.plugin.trackmate.gui.Fonts.SMALL_FONT;
@@ -62,9 +63,11 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 
 	private static final ImageIcon ICON = LacssUtils.logo64();
 
-	private static final NumberFormat DIAMETER_FORMAT = new DecimalFormat( "#.#" );
+	private static final NumberFormat MIN_CELL_AREA_FORMAT = new DecimalFormat( "#.#" );
 
-	protected static final String DOC1_URL = "https://imagej.net/plugins/trackmate/trackmate-cellpose";
+	private static final NumberFormat MIN_SCALING_FORMAT = new DecimalFormat( "#.#" );
+
+	protected static final String DOC1_URL = "https://jiyuuchc.github.io/lacss/api/deploy/#lacss.deploy.Predictor";
 
 	private final JButton btnBrowseLacssPath;
 
@@ -72,17 +75,19 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 
 	private final JComboBox< PretrainedModel > cmbboxPretrainedModel;
 
-	private final JComboBox< String > cmbboxCh1;
+	//private final JComboBox< String > cmbboxCh1;
 
-	private final JComboBox< String > cmbboxCh2;
+	//private final JComboBox< String > cmbboxCh2;
 
-	private final JFormattedTextField ftfDiameter;
+	private final JFormattedTextField ftfmin_cell_area;
 
-	private final JCheckBox chckbxSimplify;
+	private final JFormattedTextField ftfmin_scaling;
+
+	private final JCheckBox chckbxBounds;
 
 	private final Logger logger;
 
-	private final JCheckBox chckbxUseGPU;
+	private final JCheckBox chckbx_return_label;
 
 	private final JTextField tfCustomPath;
 
@@ -245,80 +250,80 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		 * Channel 1
 		 */
 
-		final JLabel lblSegmentInChannel = new JLabel( "Channel to segment:" );
-		lblSegmentInChannel.setFont( SMALL_FONT );
-		final GridBagConstraints gbcLblSegmentInChannel = new GridBagConstraints();
-		gbcLblSegmentInChannel.anchor = GridBagConstraints.EAST;
-		gbcLblSegmentInChannel.insets = new Insets( 0, 5, 5, 5 );
-		gbcLblSegmentInChannel.gridx = 0;
-		gbcLblSegmentInChannel.gridy = 7;
-		add( lblSegmentInChannel, gbcLblSegmentInChannel );
+		//final JLabel lblSegmentInChannel = new JLabel( "Channel to segment:" );
+		//lblSegmentInChannel.setFont( SMALL_FONT );
+		//final GridBagConstraints gbcLblSegmentInChannel = new GridBagConstraints();
+		//gbcLblSegmentInChannel.anchor = GridBagConstraints.EAST;
+		//gbcLblSegmentInChannel.insets = new Insets( 0, 5, 5, 5 );
+		//gbcLblSegmentInChannel.gridx = 0;
+		//gbcLblSegmentInChannel.gridy = 7;
+		//add( lblSegmentInChannel, gbcLblSegmentInChannel );
 
-		final List< String > l1 = Arrays.asList(
-				"0: grayscale",
-				"1: red",
-				"2: green",
-				"3: blue" );
-		cmbboxCh1 = new JComboBox<>( new Vector<>( l1 ) );
-		cmbboxCh1.setFont( SMALL_FONT );
-		final GridBagConstraints gbcSpinner = new GridBagConstraints();
-		gbcSpinner.fill = GridBagConstraints.HORIZONTAL;
-		gbcSpinner.gridwidth = 2;
-		gbcSpinner.insets = new Insets( 0, 5, 5, 0 );
-		gbcSpinner.gridx = 1;
-		gbcSpinner.gridy = 7;
-		add( cmbboxCh1, gbcSpinner );
+		//final List< String > l1 = Arrays.asList(
+		//		"0: grayscale",
+		//		"1: red",
+		//		"2: green",
+		//		"3: blue" );
+		//cmbboxCh1 = new JComboBox<>( new Vector<>( l1 ) );
+		//cmbboxCh1.setFont( SMALL_FONT );
+		//final GridBagConstraints gbcSpinner = new GridBagConstraints();
+		//gbcSpinner.fill = GridBagConstraints.HORIZONTAL;
+		//gbcSpinner.gridwidth = 2;
+		//gbcSpinner.insets = new Insets( 0, 5, 5, 0 );
+		//gbcSpinner.gridx = 1;
+		//gbcSpinner.gridy = 7;
+		//add( cmbboxCh1, gbcSpinner );
 
 		/*
 		 * Channel 2.
 		 */
 
-		final JLabel lblSegmentInChannelOptional = new JLabel( "Optional second channel:" );
-		lblSegmentInChannelOptional.setFont( SMALL_FONT );
-		final GridBagConstraints gbcLblSegmentInChannelOptional = new GridBagConstraints();
-		gbcLblSegmentInChannelOptional.anchor = GridBagConstraints.EAST;
-		gbcLblSegmentInChannelOptional.insets = new Insets( 0, 5, 5, 5 );
-		gbcLblSegmentInChannelOptional.gridx = 0;
-		gbcLblSegmentInChannelOptional.gridy = 8;
-		add( lblSegmentInChannelOptional, gbcLblSegmentInChannelOptional );
+		//final JLabel lblSegmentInChannelOptional = new JLabel( "Optional second channel:" );
+		//lblSegmentInChannelOptional.setFont( SMALL_FONT );
+		//final GridBagConstraints gbcLblSegmentInChannelOptional = new GridBagConstraints();
+		//gbcLblSegmentInChannelOptional.anchor = GridBagConstraints.EAST;
+		//gbcLblSegmentInChannelOptional.insets = new Insets( 0, 5, 5, 5 );
+		//gbcLblSegmentInChannelOptional.gridx = 0;
+		//gbcLblSegmentInChannelOptional.gridy = 8;
+		//add( lblSegmentInChannelOptional, gbcLblSegmentInChannelOptional );
 
-		final List< String > l2 = Arrays.asList(
-				"0: none",
-				"1: red",
-				"2: green",
-				"3: blue" );
-		cmbboxCh2 = new JComboBox<>( new Vector<>( l2 ) );
-		cmbboxCh2.setFont( SMALL_FONT );
-		final GridBagConstraints gbcSpinnerCh2 = new GridBagConstraints();
-		gbcSpinnerCh2.fill = GridBagConstraints.HORIZONTAL;
-		gbcSpinnerCh2.gridwidth = 2;
-		gbcSpinnerCh2.insets = new Insets( 0, 5, 5, 0 );
-		gbcSpinnerCh2.gridx = 1;
-		gbcSpinnerCh2.gridy = 8;
-		add( cmbboxCh2, gbcSpinnerCh2 );
+		//final List< String > l2 = Arrays.asList(
+		//		"0: none",
+		//		"1: red",
+		//		"2: green",
+		//		"3: blue" );
+		//cmbboxCh2 = new JComboBox<>( new Vector<>( l2 ) );
+		//cmbboxCh2.setFont( SMALL_FONT );
+		//final GridBagConstraints gbcSpinnerCh2 = new GridBagConstraints();
+		//gbcSpinnerCh2.fill = GridBagConstraints.HORIZONTAL;
+		//gbcSpinnerCh2.gridwidth = 2;
+		//gbcSpinnerCh2.insets = new Insets( 0, 5, 5, 0 );
+		//gbcSpinnerCh2.gridx = 1;
+		//gbcSpinnerCh2.gridy = 8;
+		//add( cmbboxCh2, gbcSpinnerCh2 );
 
 		/*
 		 * Diameter.
 		 */
 
-		final JLabel lblDiameter = new JLabel( "Cell diameter:" );
-		lblDiameter.setFont( SMALL_FONT );
-		final GridBagConstraints gbcLblDiameter = new GridBagConstraints();
-		gbcLblDiameter.anchor = GridBagConstraints.EAST;
-		gbcLblDiameter.insets = new Insets( 0, 5, 5, 5 );
-		gbcLblDiameter.gridx = 0;
-		gbcLblDiameter.gridy = 9;
-		add( lblDiameter, gbcLblDiameter );
+		final JLabel lblMin_cell_area = new JLabel( "Minimum Cell Area:" );
+		lblMin_cell_area.setFont( SMALL_FONT );
+		final GridBagConstraints gbcLblMin_cell_area = new GridBagConstraints();
+		gbcLblMin_cell_area.anchor = GridBagConstraints.EAST;
+		gbcLblMin_cell_area.insets = new Insets( 0, 5, 5, 5 );
+		gbcLblMin_cell_area.gridx = 0;
+		gbcLblMin_cell_area.gridy = 9;
+		add( lblMin_cell_area, gbcLblMin_cell_area );
 
-		ftfDiameter = new JFormattedTextField( DIAMETER_FORMAT );
-		ftfDiameter.setHorizontalAlignment( SwingConstants.CENTER );
-		ftfDiameter.setFont( SMALL_FONT );
-		final GridBagConstraints gbcFtfDiameter = new GridBagConstraints();
-		gbcFtfDiameter.insets = new Insets( 0, 5, 5, 5 );
-		gbcFtfDiameter.fill = GridBagConstraints.HORIZONTAL;
-		gbcFtfDiameter.gridx = 1;
-		gbcFtfDiameter.gridy = 9;
-		add( ftfDiameter, gbcFtfDiameter );
+		ftfmin_cell_area = new JFormattedTextField( MIN_CELL_AREA_FORMAT );
+		ftfmin_cell_area.setHorizontalAlignment( SwingConstants.CENTER );
+		ftfmin_cell_area.setFont( SMALL_FONT );
+		final GridBagConstraints gbcFtfmin_cell_area = new GridBagConstraints();
+		gbcFtfmin_cell_area.insets = new Insets( 0, 5, 5, 5 );
+		gbcFtfmin_cell_area.fill = GridBagConstraints.HORIZONTAL;
+		gbcFtfmin_cell_area.gridx = 1;
+		gbcFtfmin_cell_area.gridy = 9;
+		add( ftfmin_cell_area, gbcFtfmin_cell_area );
 
 		final JLabel lblSpaceUnits = new JLabel( model.getSpaceUnits() );
 		lblSpaceUnits.setFont( SMALL_FONT );
@@ -328,15 +333,36 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcLblSpaceUnits.gridy = 9;
 		add( lblSpaceUnits, gbcLblSpaceUnits );
 
-		chckbxUseGPU = new JCheckBox( "Use GPU:" );
-		chckbxUseGPU.setHorizontalTextPosition( SwingConstants.LEFT );
-		chckbxUseGPU.setFont( SMALL_FONT );
-		final GridBagConstraints gbcChckbxUseGPU = new GridBagConstraints();
-		gbcChckbxUseGPU.anchor = GridBagConstraints.EAST;
-		gbcChckbxUseGPU.insets = new Insets( 0, 0, 0, 5 );
-		gbcChckbxUseGPU.gridx = 0;
-		gbcChckbxUseGPU.gridy = 10;
-		add( chckbxUseGPU, gbcChckbxUseGPU );
+		chckbx_return_label = new JCheckBox( "Return Label:" );
+		chckbx_return_label.setHorizontalTextPosition( SwingConstants.LEFT );
+		chckbx_return_label.setFont( SMALL_FONT );
+		final GridBagConstraints gbcChckbx_return_label = new GridBagConstraints();
+		gbcChckbx_return_label.anchor = GridBagConstraints.EAST;
+		gbcChckbx_return_label.insets = new Insets( 0, 0, 0, 5 );
+		gbcChckbx_return_label.gridx = 0;
+		gbcChckbx_return_label.gridy = 11;
+		add( chckbx_return_label, gbcChckbx_return_label );
+
+		/* Scaling */
+
+		final JLabel lblMin_scaling = new JLabel( "Scaling Factor:" );
+		lblMin_scaling.setFont( SMALL_FONT );
+		final GridBagConstraints gbcLblMin_scaling = new GridBagConstraints();
+		gbcLblMin_scaling.anchor = GridBagConstraints.EAST;
+		gbcLblMin_scaling.insets = new Insets( 0, 5, 5, 5 );
+		gbcLblMin_scaling.gridx = 0;
+		gbcLblMin_scaling.gridy = 10;
+		add( lblMin_scaling, gbcLblMin_scaling );
+
+		ftfmin_scaling = new JFormattedTextField( MIN_SCALING_FORMAT );
+		ftfmin_scaling.setHorizontalAlignment( SwingConstants.CENTER );
+		ftfmin_scaling.setFont( SMALL_FONT );
+		final GridBagConstraints gbcFtfmin_scaling = new GridBagConstraints();
+		gbcFtfmin_scaling.insets = new Insets( 0, 5, 5, 5 );
+		gbcFtfmin_scaling.fill = GridBagConstraints.HORIZONTAL;
+		gbcFtfmin_scaling.gridx = 1;
+		gbcFtfmin_scaling.gridy = 10;
+		add( ftfmin_scaling, gbcFtfmin_scaling );
 
 		/*
 		 * Preview.
@@ -358,16 +384,18 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 				.get();
 		add( detectionPreview.getPanel(), gbcBtnPreview );
 
-		chckbxSimplify = new JCheckBox( "Simplify contours:" );
-		chckbxSimplify.setHorizontalTextPosition( SwingConstants.LEFT );
-		chckbxSimplify.setFont( SMALL_FONT );
-		final GridBagConstraints gbcChckbxSimplify = new GridBagConstraints();
-		gbcChckbxSimplify.anchor = GridBagConstraints.EAST;
-		gbcChckbxSimplify.gridwidth = 2;
-		gbcChckbxSimplify.insets = new Insets( 0, 5, 0, 0 );
-		gbcChckbxSimplify.gridx = 1;
-		gbcChckbxSimplify.gridy = 10;
-		add( chckbxSimplify, gbcChckbxSimplify );
+		//* Out of Bounds Check Box Button */
+
+		chckbxBounds = new JCheckBox( "Remove Out of Bounds:" );
+		chckbxBounds.setHorizontalTextPosition( SwingConstants.LEFT );
+		chckbxBounds.setFont( SMALL_FONT );
+		final GridBagConstraints gbcChckbxBounds = new GridBagConstraints();
+		gbcChckbxBounds.anchor = GridBagConstraints.EAST;
+		gbcChckbxBounds.gridwidth = 2;
+		gbcChckbxBounds.insets = new Insets( 0, 5, 0, 0 );
+		gbcChckbxBounds.gridx = 1;
+		gbcChckbxBounds.gridy = 11;
+		add( chckbxBounds, gbcChckbxBounds );
 
 		/*
 		 * Listeners and specificities.
@@ -424,11 +452,12 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		tfLacssExecutable.setText( ( String ) settings.get( KEY_LACSS_PYTHON_FILEPATH ) );
 		tfCustomPath.setText( ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH ) );
 		cmbboxPretrainedModel.setSelectedItem( settings.get( KEY_LACSS_MODEL ) );
-		cmbboxCh1.setSelectedIndex( ( int ) settings.get( KEY_TARGET_CHANNEL ) );
-		cmbboxCh2.setSelectedIndex( ( int ) settings.get( KEY_OPTIONAL_CHANNEL_2 ) );
-		ftfDiameter.setValue( settings.get( KEY_CELL_DIAMETER ) );
-		chckbxUseGPU.setSelected( ( boolean ) settings.get( KEY_USE_GPU ) );
-		chckbxSimplify.setSelected( ( boolean ) settings.get( KEY_SIMPLIFY_CONTOURS ) );
+		//cmbboxCh1.setSelectedIndex( ( int ) settings.get( KEY_TARGET_CHANNEL ) );
+		//cmbboxCh2.setSelectedIndex( ( int ) settings.get( KEY_OPTIONAL_CHANNEL_2 ) );
+		ftfmin_cell_area.setValue( settings.get( KEY_MIN_CELL_AREA ) );
+		chckbx_return_label.setSelected( ( boolean ) settings.get( KEY_RETURN_LABEL ) );
+		chckbxBounds.setSelected( ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS ) );
+		ftfmin_scaling.setValue( settings.get( KEY_SCALING));
 	}
 
 	@Override
@@ -440,13 +469,16 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		settings.put( KEY_LACSS_CUSTOM_MODEL_FILEPATH, tfCustomPath.getText() );
 		settings.put( KEY_LACSS_MODEL, cmbboxPretrainedModel.getSelectedItem() );
 
-		settings.put( KEY_TARGET_CHANNEL, cmbboxCh1.getSelectedIndex() );
-		settings.put( KEY_OPTIONAL_CHANNEL_2, cmbboxCh2.getSelectedIndex() );
+		//settings.put( KEY_TARGET_CHANNEL, cmbboxCh1.getSelectedIndex() );
+		//settings.put( KEY_OPTIONAL_CHANNEL_2, cmbboxCh2.getSelectedIndex() );
 
-		final double diameter = ( ( Number ) ftfDiameter.getValue() ).doubleValue();
-		settings.put( KEY_CELL_DIAMETER, diameter );
-		settings.put( KEY_SIMPLIFY_CONTOURS, chckbxSimplify.isSelected() );
-		settings.put( KEY_USE_GPU, chckbxUseGPU.isSelected() );
+		final double min_cell_area = ( ( Number ) ftfmin_cell_area.getValue() ).doubleValue();
+		settings.put( KEY_MIN_CELL_AREA, min_cell_area );
+		settings.put( KEY_REMOVE_OUT_OF_BOUNDS, chckbxBounds.isSelected() );
+		settings.put( KEY_RETURN_LABEL, chckbx_return_label.isSelected() );
+		
+		final double scaling = ( ( Number) ftfmin_scaling.getValue()).doubleValue();
+		settings.put ( KEY_SCALING, scaling );
 
 		settings.put( KEY_LOGGER, logger );
 
