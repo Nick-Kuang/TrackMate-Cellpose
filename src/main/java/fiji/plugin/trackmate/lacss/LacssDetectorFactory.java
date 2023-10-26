@@ -119,29 +119,28 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	public static final String KEY_SCALING = "SCALING";
 
 	public static final Double DEFAULT_SCALING = Double.valueOf( 1. );
+
+	/**  Optional iou threshold for the non-max-suppression post-processing. Default is 0, which disable non-max-suppression. */
+	public static final String KEY_NMS_IOU = "NMS_IOU";
+
+	public static final Double DEFAULT_NMS_IOU = Double.valueOf( 0. );
+
+	/**  Segmentation Threshold/Min Prediction scores: Default = 0 ; might remove this in future to incoropate trackmate native histogram thresholder. */
+	public static final String KEY_SEGMENTATION_THRESHOLD = "SEGMENTATION_THRESHOLD";
+
+	public static final Double DEFAULT_SEGMENTATION_THRESHOLD = Double.valueOf( 0.5 );
 	
 
 	/** An html information text. */
 	public static final String INFO_TEXT = "<html>"
 			+ "This detector relies on deep-learning model Lacss to detect cells."
 			+ "<p>"
-			+ "The detector simply calls an external cellpose installation. So for this "
-			+ "to work, you must have a cellpose installation running on your computer. "
-			+ "Please follow the instructions from the cellpose website: "
-			+ "<u><a href=\"https://github.com/MouseLand/cellpose#local-installation\">https://github.com/MouseLand/cellpose#local-installation</a></u>"
+			+ "The detector simply calls upon a pre-written python script."
+			+ "To work, certain packages will be installed to run "
+			+ "Please refer to the github of the lacss library: "
+			+ "<u><a href=\"https://github.com/jiyuuchc/lacss\">https://github.com/jiyuuchc/lacss</a></u>"
 			+ "<p>"
-			+ "You will also need to specify the path to the <b>Python executable</b> that can run cellpose "
-			+ "or the <b>cellpose executable</b> directly. "
-			+ "For instance if you used anaconda to install cellpose, and that you have a "
-			+ "Conda environment called 'cellpose', this path will be something along the line of "
-			+ "'/opt/anaconda3/envs/cellpose/bin/python'  or 'C:\\\\Users\\\\tinevez\\\\anaconda3\\\\envs\\\\cellpose_biop_gpu\\\\python.exe' "
-			+ "If you installed the standalone version, the path to it would something like "
-			+ "this on Windows: 'C:\\Users\\tinevez\\Applications\\cellpose.exe'. "
-			+ "<p>"
-			+ "If you use this detector for your work, please be so kind as to "
-			+ "also cite the Cellpose paper: <a href=\"https://doi.org/10.1038/s41592-020-01018-x\">Stringer, C., Wang, T., Michaelos, M. et al. "
-			+ "Cellpose: a generalist algorithm for cellular segmentation. "
-			+ "Nat Methods 18, 100–106 (2021)</a>"
+			+ "You will also need to specify the path to the <b>Python file</b> that can run lacss pipeline "
 			+ "<p>"
 			+ "Documentation for this module "
 			+ "<a href=\"https://imagej.net/plugins/trackmate/trackmate-cellpose\">on the ImageJ Wiki</a>."
@@ -180,6 +179,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final double min_cell_area = ( double ) settings.get( KEY_MIN_CELL_AREA ) / calibration[ 0 ];
 
 		final double scaling = (double) settings.get(KEY_SCALING);
+		final double nms_iou = (double) settings.get(KEY_NMS_IOU);
+		final double segmentation_threshold = (double) settings.get(KEY_SEGMENTATION_THRESHOLD);
 
 		final LacssSettings lacssSettings = LacssSettings.create()
 				.lacssPythonPath( lacssPythonPath )
@@ -191,6 +192,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 				.return_label( return_label )
 				.remove_out_of_bound( remove_out_of_bound )
 				.scaling ( scaling ) 
+				.nms_iou (nms_iou)
+				.segmentation_threshold (segmentation_threshold)
 				.get();
 
 		// Logger.
@@ -240,6 +243,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		ok = ok && writeAttribute( settings, element, KEY_RETURN_LABEL, Boolean.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_SCALING, Double.class, errorHolder );
+		ok = ok && writeAttribute( settings, element, KEY_NMS_IOU, Double.class, errorHolder );
+		ok = ok && writeAttribute( settings, element, KEY_SEGMENTATION_THRESHOLD, Double.class, errorHolder );
 
 		final PretrainedModel model = ( PretrainedModel ) settings.get( KEY_LACSS_MODEL );
 		element.setAttribute( KEY_LACSS_MODEL, model.name() );
@@ -264,6 +269,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		ok = ok && readBooleanAttribute( element, settings, KEY_RETURN_LABEL, errorHolder );
 		ok = ok && readBooleanAttribute( element, settings, KEY_REMOVE_OUT_OF_BOUNDS, errorHolder );
 		ok = ok && readDoubleAttribute( element, settings, KEY_SCALING, errorHolder );
+		ok = ok && readDoubleAttribute( element, settings, KEY_NMS_IOU, errorHolder );
+		ok = ok && readDoubleAttribute( element, settings, KEY_SEGMENTATION_THRESHOLD, errorHolder );
 
 		// Read model.
 		final String str = element.getAttributeValue( KEY_LACSS_MODEL );
@@ -295,6 +302,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		settings.put( KEY_RETURN_LABEL, DEFAULT_RETURN_LABEL );
 		settings.put( KEY_REMOVE_OUT_OF_BOUNDS, false );
 		settings.put( KEY_SCALING, DEFAULT_SCALING);
+		settings.put( KEY_NMS_IOU, DEFAULT_NMS_IOU);
+		settings.put ( KEY_SEGMENTATION_THRESHOLD, DEFAULT_SEGMENTATION_THRESHOLD);
 		settings.put( KEY_LOGGER, Logger.DEFAULT_LOGGER );
 		settings.put( KEY_LACSS_CUSTOM_MODEL_FILEPATH, DEFAULT_LACSS_CUSTOM_MODEL_FILEPATH );
 		return settings;
@@ -314,6 +323,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_SCALING, Double.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_NMS_IOU, Double.class, errorHolder );
+		ok = ok & checkParameter( settings, KEY_SEGMENTATION_THRESHOLD, Double.class, errorHolder );
 		
 
 		// If we have a logger, test it is of the right class.
@@ -333,7 +344,9 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 				KEY_MIN_CELL_AREA,
 				KEY_RETURN_LABEL,
 				KEY_REMOVE_OUT_OF_BOUNDS,
-				KEY_SCALING);
+				KEY_SCALING,
+				KEY_NMS_IOU,
+				KEY_SEGMENTATION_THRESHOLD);
 		final List< String > optionalKeys = Arrays.asList(
 				KEY_LACSS_CUSTOM_MODEL_FILEPATH,
 				KEY_LOGGER );

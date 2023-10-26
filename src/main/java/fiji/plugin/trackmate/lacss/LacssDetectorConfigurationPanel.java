@@ -8,6 +8,8 @@ import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LOGGER;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_OPTIONAL_CHANNEL_2;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_RETURN_LABEL;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SCALING;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_NMS_IOU;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SEGMENTATION_THRESHOLD;
 import static fiji.plugin.trackmate.detection.DetectorKeys.KEY_TARGET_CHANNEL;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_REMOVE_OUT_OF_BOUNDS;
 import static fiji.plugin.trackmate.gui.Fonts.BIG_FONT;
@@ -67,6 +69,10 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 
 	private static final NumberFormat MIN_SCALING_FORMAT = new DecimalFormat( "#.#" );
 
+	private static final NumberFormat MIN_NMS_IOU_FORMAT = new DecimalFormat( "#.#" );
+
+	private static final NumberFormat MIN_SEGMENTATION_THRESHOLD_FORMAT = new DecimalFormat( "#.#" );
+
 	protected static final String DOC1_URL = "https://jiyuuchc.github.io/lacss/api/deploy/#lacss.deploy.Predictor";
 
 	private final JButton btnBrowseLacssPath;
@@ -82,6 +88,10 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 	private final JFormattedTextField ftfmin_cell_area;
 
 	private final JFormattedTextField ftfmin_scaling;
+
+	private final JFormattedTextField ftfnms_iou;
+
+	private final JFormattedTextField ftfsegmentation_threshold;
 
 	private final JCheckBox chckbxBounds;
 
@@ -303,7 +313,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		//add( cmbboxCh2, gbcSpinnerCh2 );
 
 		/*
-		 * Diameter.
+		 * Min Cell Area.
 		 */
 
 		final JLabel lblMin_cell_area = new JLabel( "Minimum Cell Area:" );
@@ -333,6 +343,8 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcLblSpaceUnits.gridy = 9;
 		add( lblSpaceUnits, gbcLblSpaceUnits );
 
+		//* Return Label */
+
 		chckbx_return_label = new JCheckBox( "Return Label:" );
 		chckbx_return_label.setHorizontalTextPosition( SwingConstants.LEFT );
 		chckbx_return_label.setFont( SMALL_FONT );
@@ -340,7 +352,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcChckbx_return_label.anchor = GridBagConstraints.EAST;
 		gbcChckbx_return_label.insets = new Insets( 0, 0, 0, 5 );
 		gbcChckbx_return_label.gridx = 0;
-		gbcChckbx_return_label.gridy = 11;
+		gbcChckbx_return_label.gridy = 13;
 		add( chckbx_return_label, gbcChckbx_return_label );
 
 		/* Scaling */
@@ -363,6 +375,48 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcFtfmin_scaling.gridx = 1;
 		gbcFtfmin_scaling.gridy = 10;
 		add( ftfmin_scaling, gbcFtfmin_scaling );
+
+		/* nms_iou: Optional iou threshold for the non-max-suppression post-processing. Default is 0, which disable non-max-suppression.  */
+
+		final JLabel lblnms_iou = new JLabel( "IOU Treshold:" );
+		lblnms_iou.setFont( SMALL_FONT );
+		final GridBagConstraints gbcLblNms_iou = new GridBagConstraints();
+		gbcLblNms_iou.anchor = GridBagConstraints.EAST;
+		gbcLblNms_iou.insets = new Insets( 0, 5, 5, 5 );
+		gbcLblNms_iou.gridx = 0;
+		gbcLblNms_iou.gridy = 11;
+		add( lblnms_iou, gbcLblNms_iou );
+
+		ftfnms_iou = new JFormattedTextField( MIN_NMS_IOU_FORMAT );
+		ftfnms_iou.setHorizontalAlignment( SwingConstants.CENTER );
+		ftfnms_iou.setFont( SMALL_FONT );
+		final GridBagConstraints gbcFtfnms_iou = new GridBagConstraints();
+		gbcFtfnms_iou.insets = new Insets( 0, 5, 5, 5 );
+		gbcFtfnms_iou.fill = GridBagConstraints.HORIZONTAL;
+		gbcFtfnms_iou.gridx = 1;
+		gbcFtfnms_iou.gridy = 11;
+		add( ftfnms_iou, gbcFtfnms_iou );
+
+		/* 	The minimal prediction scores.: Default : 0.5 ;; I think this might be uncessary, I want to incorporate Trackmates histo scaler in future but add for now   */
+
+		final JLabel lblsegmentation_threshold = new JLabel( "Segmentation Treshold:" );
+		lblsegmentation_threshold.setFont( SMALL_FONT );
+		final GridBagConstraints gbcLblSegmentation_threshold = new GridBagConstraints();
+		gbcLblSegmentation_threshold.anchor = GridBagConstraints.EAST;
+		gbcLblSegmentation_threshold.insets = new Insets( 0, 5, 5, 5 );
+		gbcLblSegmentation_threshold.gridx = 0;
+		gbcLblSegmentation_threshold.gridy = 12;
+		add( lblsegmentation_threshold, gbcLblSegmentation_threshold );
+
+		ftfsegmentation_threshold = new JFormattedTextField( MIN_SEGMENTATION_THRESHOLD_FORMAT );
+		ftfsegmentation_threshold.setHorizontalAlignment( SwingConstants.CENTER );
+		ftfsegmentation_threshold.setFont( SMALL_FONT );
+		final GridBagConstraints gbcFtfsegmentation_threshold = new GridBagConstraints();
+		gbcFtfsegmentation_threshold.insets = new Insets( 0, 5, 5, 5 );
+		gbcFtfsegmentation_threshold.fill = GridBagConstraints.HORIZONTAL;
+		gbcFtfsegmentation_threshold.gridx = 1;
+		gbcFtfsegmentation_threshold.gridy = 12;
+		add( ftfsegmentation_threshold, gbcFtfsegmentation_threshold );
 
 		/*
 		 * Preview.
@@ -394,7 +448,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcChckbxBounds.gridwidth = 2;
 		gbcChckbxBounds.insets = new Insets( 0, 5, 0, 0 );
 		gbcChckbxBounds.gridx = 1;
-		gbcChckbxBounds.gridy = 11;
+		gbcChckbxBounds.gridy = 13;
 		add( chckbxBounds, gbcChckbxBounds );
 
 		/*
@@ -458,6 +512,8 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		chckbx_return_label.setSelected( ( boolean ) settings.get( KEY_RETURN_LABEL ) );
 		chckbxBounds.setSelected( ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS ) );
 		ftfmin_scaling.setValue( settings.get( KEY_SCALING));
+		ftfnms_iou.setValue(settings.get(KEY_NMS_IOU));
+		ftfsegmentation_threshold.setValue(settings.get(KEY_SEGMENTATION_THRESHOLD));
 	}
 
 	@Override
@@ -479,6 +535,10 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		
 		final double scaling = ( ( Number) ftfmin_scaling.getValue()).doubleValue();
 		settings.put ( KEY_SCALING, scaling );
+		final double nms_iou = ((Number) ftfnms_iou.getValue()).doubleValue();
+		settings.put (KEY_NMS_IOU, nms_iou);
+		final double segmentation_threshold = ((Number) ftfsegmentation_threshold.getValue()).doubleValue();
+		settings.put (KEY_SEGMENTATION_THRESHOLD, segmentation_threshold);
 
 		settings.put( KEY_LOGGER, logger );
 

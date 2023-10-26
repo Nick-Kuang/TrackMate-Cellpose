@@ -24,6 +24,10 @@ public class LacssSettings
 	public final boolean remove_out_of_bound;
 
 	public final double scaling;
+
+	public final double nms_iou;
+
+	public final double segmentation_threshold;
 	
 	public final boolean return_label;
 
@@ -38,6 +42,8 @@ public class LacssSettings
 			final int chan2,
 			final double min_cell_area,
 			final double scaling,
+			final double nms_iou,
+			final double segmentation_threshold,
 			final boolean return_label,
 			final boolean remove_out_of_bound )
 	{
@@ -48,6 +54,8 @@ public class LacssSettings
 		this.chan2 = chan2;
 		this.min_cell_area = min_cell_area;
 		this.scaling = scaling;
+		this.nms_iou = nms_iou;
+		this.segmentation_threshold = segmentation_threshold;
 		this.return_label = return_label;
 		this.remove_out_of_bound = remove_out_of_bound;
 	}
@@ -138,6 +146,10 @@ public class LacssSettings
 		private double min_cell_area = 0.;
 
 		private double scaling = 1.;
+
+		private double nms_iou = 0.;
+
+		private double segmentation_threshold = 0.5;
 		
 		private boolean return_label = true;
 		
@@ -181,6 +193,18 @@ public class LacssSettings
 			return this;
 		}
 
+		public Builder nms_iou( final double nms_iou )
+		{
+			this.nms_iou = nms_iou;
+			return this;
+		}
+
+		public Builder segmentation_threshold( final double segmentation_threshold )
+		{
+			this.segmentation_threshold = segmentation_threshold;
+			return this;
+		}
+
 		public Builder return_label( final boolean return_label)
 		{
 			this.return_label = return_label;
@@ -209,6 +233,8 @@ public class LacssSettings
 					chan2,
 					min_cell_area,
 					scaling,
+					nms_iou,
+					segmentation_threshold,
 					return_label,
 					remove_out_of_bound );
 		}
