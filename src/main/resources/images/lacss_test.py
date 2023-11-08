@@ -7,6 +7,10 @@ from skimage.color import label2rgb
 import imageio.v2 as imageio
 import matplotlib.pyplot as plt
 
+from jax.lib import xla_bridge
+
+print(xla_bridge.get_backend().platform)
+
 predictor = Predictor(model_urls["tissuenet"])
     
 cd = Path(__file__).parent

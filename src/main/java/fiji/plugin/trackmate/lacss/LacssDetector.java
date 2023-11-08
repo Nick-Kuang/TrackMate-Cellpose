@@ -142,7 +142,8 @@ public class LacssDetector< T extends RealType< T > & NativeType< T > > implemen
 		 */
 		
 		 //if ( !lacssSettings.useGPU && IJ.isMacintosh() )
-			nConcurrentTasks = numThreads;
+			//nConcurrentTasks = numThreads;
+		nConcurrentTasks = 1;
 		//else
 			//nConcurrentTasks = 1;
 
