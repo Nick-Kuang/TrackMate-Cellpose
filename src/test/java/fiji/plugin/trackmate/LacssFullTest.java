@@ -41,9 +41,8 @@ public class LacssFullTest
 	{
 		ImageJ.main( args );
 
-		// final ImagePlus imp = IJ.openImage( "samples/P31-crop-2.tif" );
 
-		final ImagePlus imp = IJ.openImage ( "images/3.tif" ); 
+		final ImagePlus imp = IJ.openImage ( "C:\\Users\\nyk17001\\Downloads\\test img\\3.tif" ); 
 		imp.show();
 		
 		final LacssSettings cp = LacssSettings.DEFAULT;
