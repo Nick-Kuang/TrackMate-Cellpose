@@ -131,7 +131,7 @@ public class LacssSettings
 		return new Builder();
 	}
 
-	public static String getResource( final String name )
+	public static String getResource(final String name )
 	{
 		File script = new File(LacssSettings.class.getClassLoader().getResource(name).getFile());
 		return script.getAbsolutePath();
