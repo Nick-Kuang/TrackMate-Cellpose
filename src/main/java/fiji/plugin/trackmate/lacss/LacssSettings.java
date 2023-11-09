@@ -102,12 +102,12 @@ public class LacssSettings
 
 		if ( return_label)
 		{
-			cmd.add( "--return_label True");
+			cmd.add( "--notreturn_label");
 		}
 
 		if (remove_out_of_bound)
 		{
-			cmd.add( "--remove_out_of_bound True");
+			cmd.add( "--notremove_out_of_bound");
 		}
 
 		cmd.add( "--nms_iou" );
