@@ -1,7 +1,5 @@
 package fiji.plugin.trackmate.lacss;
 
-import static fiji.plugin.trackmate.detection.DetectorKeys.DEFAULT_TARGET_CHANNEL;
-import static fiji.plugin.trackmate.detection.DetectorKeys.KEY_TARGET_CHANNEL;
 import static fiji.plugin.trackmate.io.IOUtils.readBooleanAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readDoubleAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readIntegerAttribute;
@@ -11,6 +9,7 @@ import static fiji.plugin.trackmate.io.IOUtils.writeTargetChannel;
 import static fiji.plugin.trackmate.util.TMUtils.checkMapKeys;
 import static fiji.plugin.trackmate.util.TMUtils.checkParameter;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -61,9 +60,16 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 * '/opt/anaconda3/envs/cellpose/bin/python' or
 	 * 'C:\Users\tinevez\Applications\cellpose.exe'.
 	 */
+	
+	public static String getResource(final String name )
+	{
+		File pyscript = new File(LacssDetectorFactory.class.getClassLoader().getResource(name).getFile());
+		return pyscript.getAbsolutePath();
+	}
+	
 	public static final String KEY_LACSS_PYTHON_FILEPATH = "LACSS_PYTHON_FILEPATH";
 
-	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = "/Fiji/plugins/TrackMate/lacss/lacss.py";
+	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = getResource("scripts/lacss_test.py");
 
 	/**
 	 * The key to the parameter that stores the path to the custom model file to
@@ -72,14 +78,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	public static final String KEY_LACSS_CUSTOM_MODEL_FILEPATH = "LACSS_MODEL_FILEPATH";
 
 	public static final String DEFAULT_LACSS_CUSTOM_MODEL_FILEPATH = "";
-
-	/**
-	 * The key to the parameter that stores the second optional channel to
-	 * segment. Use -1 to ignore.
-	 */
-	public static final String KEY_OPTIONAL_CHANNEL_2 = "OPTIONAL_CHANNEL_2";
-
-	public static final Integer DEFAULT_OPTIONAL_CHANNEL_2 = Integer.valueOf( 0 );
 
 	/**
 	 * The key to the parameter that store the estimated cell diameter. Contrary
@@ -170,10 +168,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final boolean remove_out_of_bound = ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS );
 		final boolean return_label = ( boolean ) settings.get( KEY_RETURN_LABEL );
 
-		// Channels are 0-based (0: grayscale, then R & G & B).
-		final int channel = ( Integer ) settings.get( KEY_TARGET_CHANNEL );
-		final int channel2 = ( Integer ) settings.get( KEY_OPTIONAL_CHANNEL_2 );
-
 		// Convert to diameter in pixels.
 		final double[] calibration = TMUtils.getSpatialCalibration( img );
 		final double min_cell_area = ( double ) settings.get( KEY_MIN_CELL_AREA ) / calibration[ 0 ];
@@ -186,8 +180,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 				.lacssPythonPath( lacssPythonPath )
 				.customModel( customModelPath )
 				.model( model )
-				.channel1( channel )
-				.channel2( channel2 )
 				.min_cell_area( min_cell_area )
 				.return_label( return_label )
 				.remove_out_of_bound( remove_out_of_bound )
@@ -237,8 +229,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		boolean ok = writeTargetChannel( settings, element, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
-		ok = ok && writeAttribute( settings, element, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
-		ok = ok && writeAttribute( settings, element, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_MIN_CELL_AREA, Double.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_RETURN_LABEL, Boolean.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
@@ -263,8 +253,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		boolean ok = true;
 		ok = ok && readStringAttribute( element, settings, KEY_LACSS_PYTHON_FILEPATH, errorHolder );
 		ok = ok && readStringAttribute( element, settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, errorHolder );
-		ok = ok && readIntegerAttribute( element, settings, KEY_TARGET_CHANNEL, errorHolder );
-		ok = ok && readIntegerAttribute( element, settings, KEY_OPTIONAL_CHANNEL_2, errorHolder );
 		ok = ok && readDoubleAttribute( element, settings, KEY_MIN_CELL_AREA, errorHolder );
 		ok = ok && readBooleanAttribute( element, settings, KEY_RETURN_LABEL, errorHolder );
 		ok = ok && readBooleanAttribute( element, settings, KEY_REMOVE_OUT_OF_BOUNDS, errorHolder );
@@ -296,8 +284,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final Map< String, Object > settings = new HashMap<>();
 		settings.put( KEY_LACSS_PYTHON_FILEPATH, DEFAULT_LACSS_PYTHON_FILEPATH );
 		settings.put( KEY_LACSS_MODEL, DEFAULT_LACSS_MODEL );
-		settings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
-		settings.put( KEY_OPTIONAL_CHANNEL_2, DEFAULT_OPTIONAL_CHANNEL_2 );
 		settings.put( KEY_MIN_CELL_AREA, DEFAULT_MIN_CELL_AREA );
 		settings.put( KEY_RETURN_LABEL, DEFAULT_RETURN_LABEL );
 		settings.put( KEY_REMOVE_OUT_OF_BOUNDS, false );
@@ -317,8 +303,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		ok = ok & checkParameter( settings, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_MODEL, PretrainedModel.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_MIN_CELL_AREA, Double.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
@@ -339,8 +323,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final List< String > mandatoryKeys = Arrays.asList(
 				KEY_LACSS_PYTHON_FILEPATH,
 				KEY_LACSS_MODEL,
-				KEY_TARGET_CHANNEL,
-				KEY_OPTIONAL_CHANNEL_2,
 				KEY_MIN_CELL_AREA,
 				KEY_RETURN_LABEL,
 				KEY_REMOVE_OUT_OF_BOUNDS,

@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.itextpdf.text.pdf.codec.Base64.InputStream;
-
 import java.io.File;
-import java.net.URL;
 
 import fiji.plugin.trackmate.lacss.LacssSettings;
 
@@ -16,10 +13,6 @@ public class LacssSettings
 
 	public final String lacssPythonPath;
 	
-	public final int chan;
-
-	public final int chan2;
-
 	public final PretrainedModel model;
 
 	public final String customModelPath;
@@ -36,15 +29,10 @@ public class LacssSettings
 	
 	public final boolean return_label;
 
-
-
-
 	public LacssSettings(
 			final String lacssPythonPath,
 			final PretrainedModel model,
 			final String customModelPath,
-			final int chan,
-			final int chan2,
 			final double min_cell_area,
 			final double scaling,
 			final double nms_iou,
@@ -55,8 +43,6 @@ public class LacssSettings
 		this.lacssPythonPath = lacssPythonPath;
 		this.model = model;
 		this.customModelPath = customModelPath;
-		this.chan = chan;
-		this.chan2 = chan2;
 		this.min_cell_area = min_cell_area;
 		this.scaling = scaling;
 		this.nms_iou = nms_iou;
@@ -70,23 +56,11 @@ public class LacssSettings
 		final List< String > cmd = new ArrayList<>();
 
 		/*
-		/ I don't think this matters anymore since its always .py; will leave for now. 
-
-		 * First decide whether we are calling Cellpose from python, or directly
-		 * the Cellpose executable. We check the last part of the path to check
-		 * whether this is python or cellpose.
-		 */
-		//final String[] split = lacssPythonPath.replace( "\\", "/" ).split( "/" );
-		//final String lastItem = split[ split.length - 1 ];
-		//if ( lastItem.toLowerCase().startsWith( "python" ) )
-		//{
-			// Calling Cellpose from python.
-		cmd.add( "python" );
-		cmd.add( lacssPythonPath );
-
-		/*
 		 * command line Paramters.
 		 */
+
+		cmd.add( "python" );
+		cmd.add( lacssPythonPath );
 
 		// Target dir.
 		cmd.add( "--datapath" );
@@ -144,10 +118,6 @@ public class LacssSettings
 
 		private String lacssPythonPath = getResource("scripts/lacss_test.py");
 
-		private int chan = 0;
-
-		private int chan2 = -1;
-
 		private PretrainedModel model = PretrainedModel.LiveCell;
 
 		private double min_cell_area = 0.;
@@ -164,18 +134,6 @@ public class LacssSettings
 
 		private String customModelPath = "";
 		
-		public Builder channel1( final int ch )
-		{
-			this.chan = ch;
-			return this;
-		}
-
-		public Builder channel2( final int ch )
-		{
-			this.chan2 = ch;
-			return this;
-		}
-
 		public Builder lacssPythonPath( final String lacssPythonPath )
 		{
 			this.lacssPythonPath = lacssPythonPath;
@@ -236,8 +194,6 @@ public class LacssSettings
 					lacssPythonPath,
 					model,
 					customModelPath,
-					chan,
-					chan2,
 					min_cell_area,
 					scaling,
 					nms_iou,
