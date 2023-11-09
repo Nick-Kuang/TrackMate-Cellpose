@@ -164,7 +164,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	@Override
 	public SpotGlobalDetector< T > getDetector( final Interval interval )
 	{
-		final String lacssPythonPath = ( String ) settings.get( KEY_LACSS_PYTHON_FILEPATH );
+		final String lacssPythonPath = (String) settings.get( KEY_LACSS_PYTHON_FILEPATH );
 		final PretrainedModel model = ( PretrainedModel ) settings.get( KEY_LACSS_MODEL );
 		final String customModelPath = ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH );
 		final boolean remove_out_of_bound = ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS );
@@ -360,13 +360,13 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 			final Object obj = settings.get( KEY_LACSS_PYTHON_FILEPATH );
 			if ( obj == null )
 			{
-				errorMessage = "The path to the Cellpose python executable is not set.";
+				errorMessage = "The path to the Lacss python script cannot be found.";
 				return false;
 			}
 
 			if ( !IOUtils.canReadFile( ( String ) obj, errorHolder ) )
 			{
-				errorMessage = "Problem with Cellpose python executable: " + errorHolder.toString();
+				errorMessage = "Problem with Lacss python script: " + errorHolder.toString();
 				return false;
 			}
 		}

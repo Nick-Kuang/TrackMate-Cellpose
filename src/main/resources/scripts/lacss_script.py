@@ -10,7 +10,7 @@ import typer
 from pathlib import Path
 
 #import main.resources.images.lacss as lacss
-from lacss.deploy import Predictor
+from lacss.deploy import Predictor, model_urls
 
 from skimage.transform import rescale
 import imageio.v2 as imageio
@@ -26,7 +26,6 @@ def main(
     min_cell_area: float = 0,
     scaling_factor: float = 1,
     nms_iou: int = 0,
-    min_area: int = 0,
     segmentation_threshold: float = 0.5,
     return_label: bool = False,
     remove_out_of_bound: bool = False,
@@ -34,10 +33,13 @@ def main(
 
     path = ''#dir of files
 
-    model_path = '' #cp path to model
 
-
-    predictor = Predictor(model_path)
+    if modelpath == 'livecell':
+        predictor = Predictor(model_urls["livecell"])
+    elif modelpath == 'tissuenet':
+        predictor = Predictor(model_urls["tissuenet"])
+    else:
+        predictor = Predictor(modelpath)
 
     for file in path:
         image = imageio.imread(file)

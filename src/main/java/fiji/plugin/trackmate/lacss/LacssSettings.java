@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.itextpdf.text.pdf.codec.Base64.InputStream;
+
+import java.net.URL;
+
 import fiji.plugin.trackmate.lacss.LacssSettings;
 
 public class LacssSettings 
@@ -65,64 +69,58 @@ public class LacssSettings
 		final List< String > cmd = new ArrayList<>();
 
 		/*
+		/ I don't think this matters anymore since its always .py; will leave for now. 
+
 		 * First decide whether we are calling Cellpose from python, or directly
 		 * the Cellpose executable. We check the last part of the path to check
 		 * whether this is python or cellpose.
 		 */
-		final String[] split = lacssPythonPath.replace( "\\", "/" ).split( "/" );
-		final String lastItem = split[ split.length - 1 ];
-		if ( lastItem.toLowerCase().startsWith( "python" ) )
-		{
+		//final String[] split = lacssPythonPath.replace( "\\", "/" ).split( "/" );
+		//final String lastItem = split[ split.length - 1 ];
+		//if ( lastItem.toLowerCase().startsWith( "python" ) )
+		//{
 			// Calling Cellpose from python.
-			cmd.add( lacssPythonPath );
-			cmd.add( "-m" );
-			cmd.add( "lacss" );
-		}
-		else
-		{
-			// Calling Cellpose executable.
-			cmd.add( lacssPythonPath );
-		}
+		cmd.add( "python" );
+		cmd.add( lacssPythonPath );
 
 		/*
-		 * Cellpose command line arguments.
+		 * command line Paramters.
 		 */
 
 		// Target dir.
-		cmd.add( "--dir" );
+		cmd.add( "--datapath" );
 		cmd.add( imagesDir );
 
 		// First channel.
-		cmd.add( "--chan" );
-		cmd.add( "" + chan );
+		cmd.add( "--min_cell_area" );
+		cmd.add( "" + min_cell_area );
 
-		// Second channel.
-		if ( chan2 >= 0 )
+
+		cmd.add( "--scaling_factor" );
+		cmd.add( "" + scaling );
+
+		if ( return_label)
 		{
-			cmd.add( "--chan2" );
-			cmd.add( "" + chan2 );
+			cmd.add( "--return_label True");
 		}
 
-		// GPU.
-		if ( return_label )
-			cmd.add( "--use_gpu" );
+		if (remove_out_of_bound)
+		{
+			cmd.add( "--remove_out_of_bound True");
+		}
 
-		// Diameter.
-		cmd.add( "--diameter" );
-		cmd.add( ( min_cell_area > 0 ) ? "" + min_cell_area : "0" );
+		cmd.add( "--nms_iou" );
+		cmd.add( "" + nms_iou);
+
+		cmd.add( "--segmentation_threshold");
+		cmd.add( "" + segmentation_threshold);
 
 		// Model.
-		cmd.add( "--pretrained_model" );
+		cmd.add( "--modelpath" );
 		if ( model == PretrainedModel.CUSTOM )
 			cmd.add( customModelPath );
 		else
 			cmd.add( model.path );
-
-		// Export results as PNG.
-		cmd.add( "--save_png" );
-
-		// Do not save Numpy files.
-		cmd.add( "--no_npy" );
 
 		return Collections.unmodifiableList( cmd );
 	}
@@ -135,7 +133,7 @@ public class LacssSettings
 	public static final class Builder
 	{
 
-		private String lacssPythonPath = "/Fiji/plugins/TrackMate/lacss/lacss.py";
+		private String lacssPythonPath = getClass().getClassLoader().getResource("scripts/lacss_script.py").getPath();
 
 		private int chan = 0;
 

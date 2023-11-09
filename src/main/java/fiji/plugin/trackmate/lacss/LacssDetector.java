@@ -583,7 +583,7 @@ public class LacssDetector< T extends RealType< T > & NativeType< T > > implemen
 			}
 
 			/*
-			 * Run Cellpose.
+			 * This is where it should call Lacss.
 			 */
 
 			try
