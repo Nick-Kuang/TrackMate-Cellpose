@@ -140,9 +140,9 @@ public class LacssSettings
 	public static final class Builder
 	{
 		
-		//private String lacssPythonPath = getClass().getClassLoader().getResource("scripts/lacss_script.py").getPath();
-		
-		private String lacssPythonPath = getResource("script/lacss_script.py");
+		//private String lacssPythonPath = getResource("scripts/lacss_script.py");
+
+		private String lacssPythonPath = getResource("scripts/lacss_test.py");
 
 		private int chan = 0;
 
