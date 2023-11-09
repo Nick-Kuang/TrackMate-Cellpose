@@ -31,6 +31,7 @@ def main(
     remove_out_of_bound: bool = False,
 ):
 
+    print(" ITS RUNNINg")
     path = ''#dir of files
 
 

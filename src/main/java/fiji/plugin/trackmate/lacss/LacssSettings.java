@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.itextpdf.text.pdf.codec.Base64.InputStream;
 
+import java.io.File;
 import java.net.URL;
 
 import fiji.plugin.trackmate.lacss.LacssSettings;
@@ -130,10 +131,18 @@ public class LacssSettings
 		return new Builder();
 	}
 
+	public static String getResource( final String name )
+	{
+		File script = new File(LacssSettings.class.getClassLoader().getResource(name).getFile());
+		return script.getAbsolutePath();
+	}
+
 	public static final class Builder
 	{
-
-		private String lacssPythonPath = getClass().getClassLoader().getResource("scripts/lacss_script.py").getPath();
+		
+		//private String lacssPythonPath = getClass().getClassLoader().getResource("scripts/lacss_script.py").getPath();
+		
+		private String lacssPythonPath = getResource("script/lacss_script.py");
 
 		private int chan = 0;
 
@@ -154,7 +163,7 @@ public class LacssSettings
 		private boolean remove_out_of_bound = false;
 
 		private String customModelPath = "";
-
+		
 		public Builder channel1( final int ch )
 		{
 			this.chan = ch;
