@@ -32,10 +32,10 @@ public class LacssSettings
 	public final double nms_iou;
 
 	public final double segmentation_threshold;
+
+	public final double detection_threshold;
 	
 	public final boolean return_label;
-
-
 
 
 	public LacssSettings(
@@ -48,6 +48,7 @@ public class LacssSettings
 			final double scaling,
 			final double nms_iou,
 			final double segmentation_threshold,
+			final double detection_threshold,
 			final boolean return_label,
 			final boolean remove_out_of_bound )
 	{
@@ -60,6 +61,7 @@ public class LacssSettings
 		this.scaling = scaling;
 		this.nms_iou = nms_iou;
 		this.segmentation_threshold = segmentation_threshold;
+		this.detection_threshold = detection_threshold;
 		this.return_label = return_label;
 		this.remove_out_of_bound = remove_out_of_bound;
 	}
@@ -148,6 +150,8 @@ public class LacssSettings
 		private double nms_iou = 0.;
 
 		private double segmentation_threshold = 0.5;
+
+		private double detection_threshold = 0.5;
 		
 		private boolean return_label = true;
 		
@@ -203,6 +207,12 @@ public class LacssSettings
 			return this;
 		}
 
+		public Builder detection_threshold( final double detection_threshold )
+		{
+			this.detection_threshold = detection_threshold;
+			return this;
+		}
+
 		public Builder return_label( final boolean return_label)
 		{
 			this.return_label = return_label;
@@ -233,6 +243,7 @@ public class LacssSettings
 					scaling,
 					nms_iou,
 					segmentation_threshold,
+					detection_threshold,
 					return_label,
 					remove_out_of_bound );
 		}
@@ -268,5 +279,5 @@ public class LacssSettings
 	}
 
 	public static final LacssSettings DEFAULT = new Builder().get();
-    
+
 }

@@ -24,6 +24,7 @@ package fiji.plugin.trackmate;
 import java.io.IOException;
 
 import fiji.plugin.trackmate.lacss.LacssDetector;
+import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
 import fiji.plugin.trackmate.lacss.LacssSettings;
 import fiji.plugin.trackmate.gui.displaysettings.DisplaySettingsIO;
 import fiji.plugin.trackmate.util.TMUtils;
@@ -32,6 +33,8 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import net.imagej.ImgPlus;
+import net.imagej.axis.Axes;
+import net.imagej.axis.DefaultLinearAxis;
 
 public class LacssFullTest
 {
@@ -42,13 +45,17 @@ public class LacssFullTest
 		ImageJ.main( args );
 
 
-		final ImagePlus imp = IJ.openImage ( "C:\\Users\\nyk17001\\Downloads\\test img\\3.tif" ); 
+		final ImagePlus imp = IJ.openImage( "../s1.avi" );
 		imp.show();
 		
 		final LacssSettings cp = LacssSettings.DEFAULT;
-		
 		final ImgPlus img = TMUtils.rawWraps( imp );
-		final LacssDetector detector = new LacssDetector( img, img, cp, Logger.DEFAULT_LOGGER );
+		img.setAxis(new DefaultLinearAxis(Axes.TIME), 2);
+
+		final LacssDetector detector = new LacssDetector (
+			img, img, cp, Logger.DEFAULT_LOGGER, LacssDetectorFactory.getPyServer()
+		);	
+			
 		if ( !detector.checkInput() )
 		{
 			System.err.println( detector.getErrorMessage() );
