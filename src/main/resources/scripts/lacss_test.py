@@ -30,4 +30,4 @@ show_images([
 
 plt.show()
 
- 
+##Runtime is ridiciousl; needs a progress bar

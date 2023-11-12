@@ -5,12 +5,10 @@ import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_MODEL;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_PYTHON_FILEPATH;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_MIN_CELL_AREA;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LOGGER;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_OPTIONAL_CHANNEL_2;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_RETURN_LABEL;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SCALING;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_NMS_IOU;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SEGMENTATION_THRESHOLD;
-import static fiji.plugin.trackmate.detection.DetectorKeys.KEY_TARGET_CHANNEL;
 import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_REMOVE_OUT_OF_BOUNDS;
 import static fiji.plugin.trackmate.gui.Fonts.BIG_FONT;
 import static fiji.plugin.trackmate.gui.Fonts.FONT;
@@ -80,10 +78,6 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 	private final JTextField tfLacssExecutable;
 
 	private final JComboBox< PretrainedModel > cmbboxPretrainedModel;
-
-	//private final JComboBox< String > cmbboxCh1;
-
-	//private final JComboBox< String > cmbboxCh2;
 
 	private final JFormattedTextField ftfmin_cell_area;
 
@@ -257,64 +251,8 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		add( cmbboxPretrainedModel, gbcCmbboxPretrainedModel );
 
 		/*
-		 * Channel 1
-		 */
-
-		//final JLabel lblSegmentInChannel = new JLabel( "Channel to segment:" );
-		//lblSegmentInChannel.setFont( SMALL_FONT );
-		//final GridBagConstraints gbcLblSegmentInChannel = new GridBagConstraints();
-		//gbcLblSegmentInChannel.anchor = GridBagConstraints.EAST;
-		//gbcLblSegmentInChannel.insets = new Insets( 0, 5, 5, 5 );
-		//gbcLblSegmentInChannel.gridx = 0;
-		//gbcLblSegmentInChannel.gridy = 7;
-		//add( lblSegmentInChannel, gbcLblSegmentInChannel );
-
-		//final List< String > l1 = Arrays.asList(
-		//		"0: grayscale",
-		//		"1: red",
-		//		"2: green",
-		//		"3: blue" );
-		//cmbboxCh1 = new JComboBox<>( new Vector<>( l1 ) );
-		//cmbboxCh1.setFont( SMALL_FONT );
-		//final GridBagConstraints gbcSpinner = new GridBagConstraints();
-		//gbcSpinner.fill = GridBagConstraints.HORIZONTAL;
-		//gbcSpinner.gridwidth = 2;
-		//gbcSpinner.insets = new Insets( 0, 5, 5, 0 );
-		//gbcSpinner.gridx = 1;
-		//gbcSpinner.gridy = 7;
-		//add( cmbboxCh1, gbcSpinner );
-
-		/*
-		 * Channel 2.
-		 */
-
-		//final JLabel lblSegmentInChannelOptional = new JLabel( "Optional second channel:" );
-		//lblSegmentInChannelOptional.setFont( SMALL_FONT );
-		//final GridBagConstraints gbcLblSegmentInChannelOptional = new GridBagConstraints();
-		//gbcLblSegmentInChannelOptional.anchor = GridBagConstraints.EAST;
-		//gbcLblSegmentInChannelOptional.insets = new Insets( 0, 5, 5, 5 );
-		//gbcLblSegmentInChannelOptional.gridx = 0;
-		//gbcLblSegmentInChannelOptional.gridy = 8;
-		//add( lblSegmentInChannelOptional, gbcLblSegmentInChannelOptional );
-
-		//final List< String > l2 = Arrays.asList(
-		//		"0: none",
-		//		"1: red",
-		//		"2: green",
-		//		"3: blue" );
-		//cmbboxCh2 = new JComboBox<>( new Vector<>( l2 ) );
-		//cmbboxCh2.setFont( SMALL_FONT );
-		//final GridBagConstraints gbcSpinnerCh2 = new GridBagConstraints();
-		//gbcSpinnerCh2.fill = GridBagConstraints.HORIZONTAL;
-		//gbcSpinnerCh2.gridwidth = 2;
-		//gbcSpinnerCh2.insets = new Insets( 0, 5, 5, 0 );
-		//gbcSpinnerCh2.gridx = 1;
-		//gbcSpinnerCh2.gridy = 8;
-		//add( cmbboxCh2, gbcSpinnerCh2 );
-
-		/*
-		 * Min Cell Area.
-		 */
+		* Min Cell Area.
+		*/
 
 		final JLabel lblMin_cell_area = new JLabel( "Minimum Cell Area:" );
 		lblMin_cell_area.setFont( SMALL_FONT );
@@ -355,7 +293,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcChckbx_return_label.gridy = 13;
 		add( chckbx_return_label, gbcChckbx_return_label );
 
-		/* Scaling */
+		/* Scaling Factor*/
 
 		final JLabel lblMin_scaling = new JLabel( "Scaling Factor:" );
 		lblMin_scaling.setFont( SMALL_FONT );
@@ -526,8 +464,6 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		tfLacssExecutable.setText( ( String ) settings.get( KEY_LACSS_PYTHON_FILEPATH ) );
 		tfCustomPath.setText( ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH ) );
 		cmbboxPretrainedModel.setSelectedItem( settings.get( KEY_LACSS_MODEL ) );
-		//cmbboxCh1.setSelectedIndex( ( int ) settings.get( KEY_TARGET_CHANNEL ) );
-		//cmbboxCh2.setSelectedIndex( ( int ) settings.get( KEY_OPTIONAL_CHANNEL_2 ) );
 		ftfmin_cell_area.setValue( settings.get( KEY_MIN_CELL_AREA ) );
 		chckbx_return_label.setSelected( ( boolean ) settings.get( KEY_RETURN_LABEL ) );
 		chckbxBounds.setSelected( ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS ) );
@@ -544,9 +480,6 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		settings.put( KEY_LACSS_PYTHON_FILEPATH, tfLacssExecutable.getText() );
 		settings.put( KEY_LACSS_CUSTOM_MODEL_FILEPATH, tfCustomPath.getText() );
 		settings.put( KEY_LACSS_MODEL, cmbboxPretrainedModel.getSelectedItem() );
-
-		//settings.put( KEY_TARGET_CHANNEL, cmbboxCh1.getSelectedIndex() );
-		//settings.put( KEY_OPTIONAL_CHANNEL_2, cmbboxCh2.getSelectedIndex() );
 
 		final double min_cell_area = ( ( Number ) ftfmin_cell_area.getValue() ).doubleValue();
 		settings.put( KEY_MIN_CELL_AREA, min_cell_area );

@@ -15,13 +15,15 @@ from lacss.deploy import Predictor, model_urls
 from skimage.transform import rescale
 import imageio.v2 as imageio
 
+import os
+
 app = typer.Typer(pretty_exceptions_enable=False)
 
 
 @app.command()
 def main(
     modelpath: Path,
-    datapath: Path = Path("../../livecell_dataset"),
+    datapath: Path = Path,
     logpath: Path = Path("."),
     min_cell_area: float = 0,
     scaling_factor: float = 1,
@@ -30,9 +32,6 @@ def main(
     return_label: bool = False,
     remove_out_of_bound: bool = False,
 ):
-
-    path = ''#dir of files
-
 
     if modelpath == 'livecell':
         predictor = Predictor(model_urls["livecell"])
