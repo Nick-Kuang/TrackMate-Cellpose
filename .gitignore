@@ -18,3 +18,8 @@
 
 ## SciJava release tools
 pom.xml.releaseBackup
+
+.venv/**
+**/__pycache__/**
+
+.vscode/**

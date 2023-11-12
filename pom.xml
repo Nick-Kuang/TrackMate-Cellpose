@@ -10,16 +10,16 @@
 	</parent>
 
 	<groupId>sc.fiji</groupId>
-	<artifactId>TrackMate-Cellpose</artifactId>
-	<version>0.1.3-SNAPSHOT</version>
+	<artifactId>TrackMate-Lacss</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
 
-	<name>TrackMate-Cellpose</name>
-	<description>TrackMate detector based on Cellpose.</description>
-	<url>https://github.com/trackmate-sc/TrackMate-Cellpose</url>
-	<inceptionYear>2021</inceptionYear>
+	<name>TrackMate-Lacss</name>
+	<description>TrackMate detector based on Lacss model.</description>
+	<url>https://github.com/jiyuuchc/lacss</url>
+	<inceptionYear>2023</inceptionYear>
 	<organization>
-		<name>TrackMate</name>
-		<url>https://github.com/trackmate-sc</url>
+		<name>UCHC</name>
+		<url>https://github.com/jiyuuchc</url>
 	</organization>
 	<licenses>
 		<license>
@@ -47,9 +47,7 @@
 	</developers>
 	<contributors>
 		<contributor>
-			<name>Curtis Rueden</name>
-			<url>https://imagej.net/people/ctrueden</url>
-			<properties><id>ctrueden</id></properties>
+			<name>Nicholas Kuang</name>
 		</contributor>
 	</contributors>
 
@@ -61,18 +59,18 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:https://github.com/trackmate-sc/TrackMate-Cellpose</connection>
-		<developerConnection>scm:git:git@github.com:trackmate-sc/TrackMate-Cellpose</developerConnection>
+		<connection>scm:git:https://github.com/trackmate-sc/TrackMate</connection>
+		<developerConnection>scm:git:git@github.com:trackmate-sc/TrackMate</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/trackmate-sc/TrackMate-Cellpose</url>
+		<url>https://github.com/trackmate-sc/TrackMate</url>
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/trackmate-sc/TrackMate-Cellpose/issues</url>
+		<url>https://github.com/jiyuuchc/lacss/issues</url>
 	</issueManagement>
 	<ciManagement>
 		<system>GitHub Actions</system>
-		<url>https://github.com/trackmate-sc/TrackMate-Cellpose</url>
+		<url>https://github.com/jiyuuchc/lacss/</url>
 	</ciManagement>
 
 	<properties>
@@ -131,6 +129,12 @@
 		<dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.23.0</version>
 		</dependency>
 	</dependencies>
 
