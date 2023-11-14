@@ -70,7 +70,6 @@ public class LacssSettings
 		cmd.add( "--datapath" );
 		cmd.add( imagesDir );
 
-		// First channel.
 		cmd.add( "--min_cell_area" );
 		cmd.add( "" + min_cell_area );
 

@@ -21,55 +21,55 @@
  */
 package fiji.plugin.trackmate;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
-import fiji.plugin.trackmate.lacss.LacssDetector;
-import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
-import fiji.plugin.trackmate.lacss.LacssSettings;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import fiji.plugin.trackmate.detection.LabelImageDetectorFactory;
 import fiji.plugin.trackmate.gui.displaysettings.DisplaySettingsIO;
-import fiji.plugin.trackmate.util.TMUtils;
+import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
 import fiji.plugin.trackmate.visualization.hyperstack.HyperStackDisplayer;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
-import net.imagej.ImgPlus;
-import net.imagej.axis.Axes;
-import net.imagej.axis.DefaultLinearAxis;
+import net.imglib2.img.display.imagej.ImageJFunctions;
 
+/**
+ * Inspired by the BIOP approach.
+ */
 public class LacssFullTest
 {
 
-	@SuppressWarnings( { "rawtypes", "unchecked" } )
-	public static void main( final String[] args ) throws IOException, InterruptedException
-	{
-		ImageJ.main( args );
+	public static void main( final String[] args ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
+	{						  
+		UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 
+		ImageJ.main( args );
 
 		final ImagePlus imp = IJ.openImage( "../s1.tif" );
 		imp.show();
-		
-		final LacssSettings cp = LacssSettings.DEFAULT;
-		final ImgPlus img = TMUtils.rawWraps( imp );
-		img.setAxis(new DefaultLinearAxis(Axes.TIME), 2);
 
-		final LacssDetector detector = new LacssDetector (
-			img, img, cp, Logger.DEFAULT_LOGGER, LacssDetectorFactory.getPyServer()
-		);	
-			
-		if ( !detector.checkInput() )
+		// TrackMatePlugIn plugin = new TrackMatePlugIn();
+		// plugin.run(null);
+
+		final Settings settings = new Settings( imp );
+		final LacssDetectorFactory< ? > detectorFactory = new LacssDetectorFactory<>();
+		final Map< String, Object > detectorSettings = detectorFactory.getDefaultSettings();
+		settings.detectorFactory = detectorFactory;
+		settings.detectorSettings = detectorSettings;
+
+		final TrackMate trackMate = new TrackMate( settings );
+		// labelImgTrackMate.setNumThreads( 1 );
+		if ( !trackMate.execDetection() )
 		{
-			System.err.println( detector.getErrorMessage() );
+			System.err.println(trackMate.getErrorMessage());
 			return;
 		}
-		
-		if ( !detector.process() )
-		{
-			System.err.println( detector.getErrorMessage() );
-			return;
-		}
-		
-		System.out.println( String.format( "Done in %.1f s.", detector.getProcessingTime() / 1000. ) );
-		final SpotCollection spots = detector.getResult();
+
+		final SpotCollection spots = trackMate.getModel().getSpots();
+
 		spots.setVisible( true );
 		System.out.println( spots );
 
@@ -79,5 +79,6 @@ public class LacssFullTest
 		
 		final HyperStackDisplayer displayer = new HyperStackDisplayer( model, selectionModel, imp, DisplaySettingsIO.readUserDefault() );
 		displayer.render();
+
 	}
 }

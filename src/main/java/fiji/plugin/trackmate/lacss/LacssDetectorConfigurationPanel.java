@@ -380,21 +380,21 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		 * Check if GPU Detected.
 		 */
 
-		final GridBagConstraints gbcBtncheck_gpu = new GridBagConstraints();
-		gbcBtncheck_gpu.gridwidth = 3;
-		gbcBtncheck_gpu.fill = GridBagConstraints.BOTH;
-		gbcBtncheck_gpu.insets = new Insets( 0, 5, 5, 5 );
-		gbcBtncheck_gpu.gridx = 2;
-		gbcBtncheck_gpu.gridy = 16;
+		// final GridBagConstraints gbcBtncheck_gpu = new GridBagConstraints();
+		// gbcBtncheck_gpu.gridwidth = 3;
+		// gbcBtncheck_gpu.fill = GridBagConstraints.BOTH;
+		// gbcBtncheck_gpu.insets = new Insets( 0, 5, 5, 5 );
+		// gbcBtncheck_gpu.gridx = 2;
+		// gbcBtncheck_gpu.gridy = 16;
 
-		final DetectionPreview detectioncheck_gpu = DetectionPreview.create()
-				.model( model )
-				.settings( settings )
-				.detectorFactory( new LacssDetectorFactory<>() )
-				.detectionSettingsSupplier( () -> getSettings() )
-				.axisLabel( "Area histogram" )
-				.get();
-		add( detectioncheck_gpu.getPanel(), gbcBtncheck_gpu );
+		// final DetectionPreview detectioncheck_gpu = DetectionPreview.create()
+		// 		.model( model )
+		// 		.settings( settings )
+		// 		.detectorFactory( new LacssDetectorFactory<>() )
+		// 		.detectionSettingsSupplier( () -> getSettings() )
+		// 		.axisLabel( "Area histogram" )
+		// 		.get();
+		// add( detectioncheck_gpu.getPanel(), gbcBtncheck_gpu );
 
 		//* Out of Bounds Check Box Button */
 

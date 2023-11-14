@@ -23,8 +23,9 @@ package fiji.plugin.trackmate;
 
 import java.io.IOException;
 
-import fiji.plugin.trackmate.cellpose.CellposeDetector;
-import fiji.plugin.trackmate.cellpose.CellposeSettings;
+import fiji.plugin.trackmate.lacss.LacssDetector;
+import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
+import fiji.plugin.trackmate.lacss.LacssSettings;
 import fiji.plugin.trackmate.gui.displaysettings.DisplaySettingsIO;
 import fiji.plugin.trackmate.util.TMUtils;
 import fiji.plugin.trackmate.visualization.hyperstack.HyperStackDisplayer;
@@ -32,11 +33,10 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import net.imagej.ImgPlus;
+import net.imagej.axis.Axes;
+import net.imagej.axis.DefaultLinearAxis;
 
-/**
- * Inspired by the BIOP approach.
- */
-public class CellPoseAttempt2
+public class LacssDetectionTest
 {
 
 	@SuppressWarnings( { "rawtypes", "unchecked" } )
@@ -44,14 +44,18 @@ public class CellPoseAttempt2
 	{
 		ImageJ.main( args );
 
-		final ImagePlus imp = IJ.openImage( "samples/P31-crop-2.tif" );
+
+		final ImagePlus imp = IJ.openImage( "../s1.tif" );
 		imp.show();
 		
-		// Cellpose command line options.
-		final CellposeSettings cp = CellposeSettings.DEFAULT;
-		
+		final LacssSettings cp = LacssSettings.DEFAULT;
 		final ImgPlus img = TMUtils.rawWraps( imp );
-		final CellposeDetector detector = new CellposeDetector( img, img, cp, Logger.DEFAULT_LOGGER );
+		img.setAxis(new DefaultLinearAxis(Axes.TIME), 2);
+
+		final LacssDetector detector = new LacssDetector (
+			img, img, cp, Logger.DEFAULT_LOGGER, LacssDetectorFactory.getPyServer()
+		);	
+			
 		if ( !detector.checkInput() )
 		{
 			System.err.println( detector.getErrorMessage() );

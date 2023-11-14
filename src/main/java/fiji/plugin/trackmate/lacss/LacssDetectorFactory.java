@@ -4,12 +4,16 @@ import static fiji.plugin.trackmate.io.IOUtils.readBooleanAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readDoubleAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readStringAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.writeAttribute;
-import static fiji.plugin.trackmate.io.IOUtils.writeTargetChannel;
+// import static fiji.plugin.trackmate.io.IOUtils.writeTargetChannel;
 import static fiji.plugin.trackmate.util.TMUtils.checkMapKeys;
 import static fiji.plugin.trackmate.util.TMUtils.checkParameter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Element;
 import org.scijava.plugin.Plugin;
 
@@ -49,8 +54,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	public static final String KEY_LACSS_PYTHON_FILEPATH = "LACSS_PYTHON_FILEPATH";
 	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = "/Fiji/plugins/TrackMate/lacss/lacss.py";
 
-	public static final String KEY_TARGET_CHANNEL = "LACSS_CHANNEL";
-	public static final int DEFAULT_TARGET_CHANNEL = 1;
+	// public static final String KEY_TARGET_CHANNEL = "LACSS_CHANNEL";
+	// public static final int DEFAULT_TARGET_CHANNEL = 1;
 
 	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.LiveCell;
 
@@ -74,8 +79,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 */
 	public static final String KEY_LACSS_CUSTOM_MODEL_FILEPATH = "LACSS_MODEL_FILEPATH";
 	public static final String DEFAULT_LACSS_CUSTOM_MODEL_FILEPATH = "";
-	public static final String KEY_OPTIONAL_CHANNEL_2 = "OPTIONAL_CHANNEL_2";
-	public static final Integer DEFAULT_OPTIONAL_CHANNEL_2 = Integer.valueOf( 0 );
+	// public static final String KEY_OPTIONAL_CHANNEL_2 = "OPTIONAL_CHANNEL_2";
+	// public static final Integer DEFAULT_OPTIONAL_CHANNEL_2 = Integer.valueOf( 0 );
 	public static final String KEY_RETURN_LABEL = "RETURN_LABEL";
 	public static final boolean DEFAULT_RETURN_LABEL = Boolean.valueOf(false);
 
@@ -152,26 +157,58 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	protected String errorMessage;
 
 	protected static Process pyServer = null; // the py process that does the computation
+	private static String pyFilePath;
+	private static String modelPath;
 
 	/*
 	 * METHODS
 	 */
 
+	static String exportResource(String resourceName) throws IOException
+	{
+		InputStream stream = LacssDetectorFactory.class.getResourceAsStream(resourceName);
+		if (stream == null) {
+			throw new RuntimeException("Cannot find resource needed: " + resourceName);
+		}
+		File outfile = File.createTempFile("lacss_", "");
+		FileUtils.copyInputStreamToFile(stream, outfile);
+
+		return outfile.getAbsolutePath();
+	}
+
+	private static void addOnShutdownHook()
+	{
+		Runtime.getRuntime().addShutdownHook( new Thread( new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				new File(pyFilePath).delete();
+				new File(modelPath).delete();
+
+				if (pyServer.isAlive()) {
+					pyServer.destroy();
+				}
+			}
+		}));
+	}
+
 	public static Process getPyServer()
 	{
 		if (pyServer == null) { // the server has not been started
 			try {
-				String pyFilePath = new File(LacssDetectorFactory.class.getResource(PY_SCRIPT_PATH).getFile()).getAbsolutePath();
-				String modelPath = new File(LacssDetectorFactory.class.getResource(MODEL_PATH).getFile()).getAbsolutePath();
+				pyFilePath = exportResource(PY_SCRIPT_PATH);
+				modelPath = exportResource(MODEL_PATH);
 
 				ProcessBuilder pb = new ProcessBuilder("python", pyFilePath, modelPath);
 				pb.redirectError( ProcessBuilder.Redirect.INHERIT );
 
 				pyServer = pb.start();
+
+				//System.err.println(pyFilePath);
+
+				addOnShutdownHook();
 			}
-			catch (NullPointerException e) {
-				throw(new RuntimeException("Failed to start the python engine because missing JAVA resource files.\n"));
-			} 
 			catch (IOException e) {
 				throw(new RuntimeException("Failed to start the python engine.\n" + e.getLocalizedMessage()));
 			}
@@ -191,8 +228,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final String customModelPath = ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH );
 
 		final boolean return_label = ( boolean ) settings.get( KEY_RETURN_LABEL );
-		final int channel = ( Integer ) settings.get( KEY_TARGET_CHANNEL );
-		final int channel2 = ( Integer ) settings.get( KEY_OPTIONAL_CHANNEL_2 );
+		// final int channel = ( Integer ) settings.get( KEY_TARGET_CHANNEL );
+		// final int channel2 = ( Integer ) settings.get( KEY_OPTIONAL_CHANNEL_2 );
 
 		// Convert to diameter in pixels.
 		final double[] calibration = TMUtils.getSpatialCalibration( img );
@@ -256,7 +293,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	public boolean marshall( final Map< String, Object > settings, final Element element )
 	{
 		final StringBuilder errorHolder = new StringBuilder();
-		boolean ok = writeTargetChannel( settings, element, errorHolder );
+		boolean ok = true; // writeTargetChannel( settings, element, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
 		ok = ok && writeAttribute( settings, element, KEY_MIN_CELL_AREA, Double.class, errorHolder );
@@ -310,8 +347,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	{
 		final Map< String, Object > settings = new HashMap<>();
 		settings.put( KEY_LACSS_PYTHON_FILEPATH, DEFAULT_LACSS_PYTHON_FILEPATH );
-		settings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
-		settings.put( KEY_OPTIONAL_CHANNEL_2, DEFAULT_OPTIONAL_CHANNEL_2 );
+		// settings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
+		// settings.put( KEY_OPTIONAL_CHANNEL_2, DEFAULT_OPTIONAL_CHANNEL_2 );
 		settings.put( KEY_LACSS_MODEL, DEFAULT_LACSS_MODEL );
 		settings.put( KEY_MIN_CELL_AREA, DEFAULT_MIN_CELL_AREA );
 		settings.put( KEY_RETURN_LABEL, DEFAULT_RETURN_LABEL );
@@ -332,8 +369,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final StringBuilder errorHolder = new StringBuilder();
 		ok = ok & checkParameter( settings, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
+		// ok = ok & checkParameter( settings, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
+		// ok = ok & checkParameter( settings, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_MODEL, PretrainedModel.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_MIN_CELL_AREA, Double.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );

@@ -2,6 +2,7 @@ package fiji.plugin.trackmate.lacss;
 
 import static fiji.plugin.trackmate.detection.DetectorKeys.DEFAULT_TARGET_CHANNEL;
 import static fiji.plugin.trackmate.detection.DetectorKeys.KEY_TARGET_CHANNEL;
+import static fiji.plugin.trackmate.detection.ThresholdDetectorFactory.KEY_SIMPLIFY_CONTOURS;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.scijava.Cancelable;
 
@@ -21,13 +23,13 @@ import fiji.plugin.trackmate.Spot;
 import fiji.plugin.trackmate.SpotCollection;
 import fiji.plugin.trackmate.TrackMate;
 import fiji.plugin.trackmate.detection.LabelImageDetectorFactory;
+import fiji.plugin.trackmate.detection.MaskUtils;
 import fiji.plugin.trackmate.detection.SpotGlobalDetector;
 import fiji.plugin.trackmate.util.TMUtils;
 import net.imagej.ImgPlus;
 import net.imagej.axis.Axes;
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.MultiThreaded;
 import net.imglib2.converter.RealTypeConverters;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImg;
@@ -36,6 +38,7 @@ import net.imglib2.img.basictypeaccess.array.ShortArray;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.img.display.imagej.ImgPlusViews;
 import net.imglib2.loops.LoopBuilder;
+import net.imglib2.roi.labeling.ImgLabeling;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.ShortType;
@@ -258,42 +261,67 @@ public class LacssDetector< T extends RealType< T > & NativeType< T > > implemen
 		/*
 		 * Run in the label detector.
 		 */
+		// ImageJFunctions.show(label);
 
 		logger.log( "Converting masks to spots.\n" );
-		final Settings labelImgSettings = new Settings( ImageJFunctions.wrap(label, "labels") );
-		final LabelImageDetectorFactory< ? > labeImageDetectorFactory = new LabelImageDetectorFactory<>();
-		final Map< String, Object > detectorSettings = labeImageDetectorFactory.getDefaultSettings();
-		detectorSettings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
-		// detectorSettings.put( KEY_SIMPLIFY_CONTOURS, remove_out_of_bound );
-		labelImgSettings.detectorFactory = labeImageDetectorFactory;
-		labelImgSettings.detectorSettings = detectorSettings;
 
-		final TrackMate labelImgTrackMate = new TrackMate( labelImgSettings );
-		// labelImgTrackMate.setNumThreads( 1 );
-		if ( !labelImgTrackMate.execDetection() )
-		{
-			errorMessage = BASE_ERROR_MESSAGE + labelImgTrackMate.getErrorMessage();
-			return false;
-		}
-		final SpotCollection tmpSpots = labelImgTrackMate.getModel().getSpots();
-
-		/*
-		 * Reposition spots with respect to the interval and time.
-		 */
 		final List< Spot > slist = new ArrayList<>();
-		for ( final Spot spot : tmpSpots.iterable( false ) )
+		for ( long t = minT; t <= maxT; t++ )
 		{
-			for ( int d = 0; d < interval.numDimensions() - 1; d++ )
-			{
-				final double pos = spot.getDoublePosition( d ) + interval.min( d ) * calibration[ d ];
-				spot.putFeature( Spot.POSITION_FEATURES[ d ], Double.valueOf( pos ) );
+			IntervalView<ShortType> frame = Views.hyperSlice(label, 2, t);
+			final AtomicInteger max = new AtomicInteger( 0 );
+			Views.iterable( frame ).forEach( p -> {
+				final int val = p.getInteger();
+				if ( val != 0 && val > max.get() )
+					max.set( val );
+			} );
+			final List< Integer > indices = new ArrayList<>( max.get() );
+			for ( int i = 0; i < max.get(); i++ )
+				indices.add( Integer.valueOf( i + 1 ) );
+
+			final ImgLabeling< Integer, ShortType > labeling = ImgLabeling.fromImageAndLabels( frame, indices );
+			final List< Spot > curSpots = MaskUtils.fromLabelingWithROI(labeling, cropInterval, calibration, false, null );
+			for (Spot spot : curSpots) {
+				spot.putFeature(Spot.FRAME, Double.valueOf(t));
 			}
-			// Shift in time.
-			final int frame = spot.getFeature( Spot.FRAME ).intValue() + (int) minT;
-			spot.putFeature( Spot.POSITION_T, frame * frameInterval );
-			spot.putFeature( Spot.FRAME, Double.valueOf( frame ) );
-			slist.add( spot );
+			slist.addAll(curSpots);
 		}
+
+		// final Settings labelImgSettings = new Settings( ImageJFunctions.wrap(label, "labels") );
+		// final LabelImageDetectorFactory< ? > labeImageDetectorFactory = new LabelImageDetectorFactory<>();
+		// final Map< String, Object > detectorSettings = labeImageDetectorFactory.getDefaultSettings();
+		// detectorSettings.put( KEY_TARGET_CHANNEL, DEFAULT_TARGET_CHANNEL );
+		// detectorSettings.put( KEY_SIMPLIFY_CONTOURS, false);
+		// labelImgSettings.detectorFactory = labeImageDetectorFactory;
+		// labelImgSettings.detectorSettings = detectorSettings;
+
+		// final TrackMate labelImgTrackMate = new TrackMate( labelImgSettings );
+		// // labelImgTrackMate.setNumThreads( 1 );
+		// if ( !labelImgTrackMate.execDetection() )
+		// {
+		// 	errorMessage = BASE_ERROR_MESSAGE + labelImgTrackMate.getErrorMessage();
+		// 	return false;
+		// }
+		// final SpotCollection tmpSpots = labelImgTrackMate.getModel().getSpots();
+
+		// /*
+		//  * Reposition spots with respect to the interval and time.
+		//  */
+		// final List< Spot > slist = new ArrayList<>();
+		// for ( final Spot spot : tmpSpots.iterable( false ) )
+		// {
+		// 	for ( int d = 0; d < interval.numDimensions() - 1; d++ )
+		// 	{
+		// 		final double pos = spot.getDoublePosition( d ) + interval.min( d ) * calibration[ d ];
+		// 		spot.putFeature( Spot.POSITION_FEATURES[ d ], Double.valueOf( pos ) );
+		// 	}
+		// 	// Shift in time.
+		// 	final int frame = spot.getFeature( Spot.FRAME ).intValue() + (int) minT;
+		// 	spot.putFeature( Spot.POSITION_T, frame * frameInterval );
+		// 	spot.putFeature( Spot.FRAME, Double.valueOf( frame ) );
+		// 	slist.add( spot );
+		// }
+
 		spots = SpotCollection.fromCollection( slist );
 
 		/*
