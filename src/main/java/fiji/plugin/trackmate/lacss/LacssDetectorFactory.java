@@ -4,16 +4,12 @@ import static fiji.plugin.trackmate.io.IOUtils.readBooleanAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readDoubleAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readStringAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.writeAttribute;
-// import static fiji.plugin.trackmate.io.IOUtils.writeTargetChannel;
 import static fiji.plugin.trackmate.util.TMUtils.checkMapKeys;
 import static fiji.plugin.trackmate.util.TMUtils.checkParameter;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,20 +24,14 @@ import org.scijava.plugin.Plugin;
 import fiji.plugin.trackmate.Logger;
 import fiji.plugin.trackmate.Model;
 import fiji.plugin.trackmate.Settings;
-import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
-import fiji.plugin.trackmate.lacss.LacssSettings.PretrainedModel;
-import fiji.plugin.trackmate.detection.DetectionUtils;
 import fiji.plugin.trackmate.detection.SpotDetector;
 import fiji.plugin.trackmate.detection.SpotDetectorFactory;
 import fiji.plugin.trackmate.detection.SpotDetectorFactoryBase;
-import fiji.plugin.trackmate.detection.SpotGlobalDetector;
-import fiji.plugin.trackmate.detection.SpotGlobalDetectorFactory;
 import fiji.plugin.trackmate.gui.components.ConfigurationPanel;
-import fiji.plugin.trackmate.util.TMUtils;
+import fiji.plugin.trackmate.lacss.LacssDetectorConfigurationPanel.PretrainedModel;
 import net.imagej.ImgPlus;
 import net.imagej.axis.Axes;
 import net.imglib2.Interval;
-import net.imglib2.RandomAccessible;
 import net.imglib2.img.display.imagej.ImgPlusViews;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
@@ -62,7 +52,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	// public static final String KEY_TARGET_CHANNEL = "LACSS_CHANNEL";
 	// public static final int DEFAULT_TARGET_CHANNEL = 1;
 
-	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.LiveCell;
+	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.Default;
 
 	/**
 	 * The key to the parameter that stores the path to the custom model file to
@@ -212,38 +202,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		return pyServer;
 	}
 
-	public LacssSettings getLacssSettings() 
-	{
-		final String lacssPythonPath = (String) settings.get( KEY_LACSS_PYTHON_FILEPATH );
-		final PretrainedModel model = ( PretrainedModel ) settings.get( KEY_LACSS_MODEL );
-		final String customModelPath = ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH );
-
-		final boolean return_label = ( boolean ) settings.get( KEY_RETURN_LABEL );
-
-		// Convert to diameter in pixels.
-		final double[] calibration = TMUtils.getSpatialCalibration( img );
-		final double min_cell_area = ( double ) settings.get( KEY_MIN_CELL_AREA ) / calibration[ 0 ];
-
-		final boolean remove_out_of_bound = ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS );
-		final double scaling = (double) settings.get(KEY_SCALING);
-		final double nms_iou = (double) settings.get(KEY_NMS_IOU);
-		final double segmentation_threshold = (double) settings.get(KEY_SEGMENTATION_THRESHOLD);
-		
-		final LacssSettings lacssSettings = LacssSettings.create()
-				.lacssPythonPath( lacssPythonPath )
-				.customModel( customModelPath )
-				.model( model )
-				.min_cell_area( min_cell_area )
-				.return_label( return_label )
-				.remove_out_of_bound( remove_out_of_bound )
-				.scaling ( scaling ) 
-				.nms_iou (nms_iou)
-				.segmentation_threshold (segmentation_threshold)
-				.get();
-		
-		return lacssSettings;
-	}
-
 	@Override
 	public SpotDetector< T > getDetector( final Interval interval, final int frame )
 	{
@@ -260,7 +218,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final LacssDetector< T > detector = new LacssDetector<T>(
 				singleTimePoint,
 				interval,
-				getLacssSettings(),
+				settings,
 				( Logger ) settings.get( KEY_LOGGER ),
 				getPyServer()
 		);
@@ -366,11 +324,11 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	{
 		boolean ok = true;
 		final StringBuilder errorHolder = new StringBuilder();
-		ok = ok & checkParameter( settings, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
+		// ok = ok & checkParameter( settings, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_MODEL, PretrainedModel.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_MIN_CELL_AREA, Double.class, errorHolder );
-		ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );
+		// ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_REMOVE_OUT_OF_BOUNDS, Boolean.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_SCALING, Double.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_NMS_IOU, Double.class, errorHolder );
@@ -387,10 +345,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		}
 
 		final List< String > mandatoryKeys = Arrays.asList(
-				KEY_LACSS_PYTHON_FILEPATH,
+				// KEY_LACSS_PYTHON_FILEPATH,
 				KEY_LACSS_MODEL,
 				KEY_MIN_CELL_AREA,
-				KEY_RETURN_LABEL,
+				// KEY_RETURN_LABEL,
 				KEY_REMOVE_OUT_OF_BOUNDS,
 				KEY_SCALING,
 				KEY_NMS_IOU,

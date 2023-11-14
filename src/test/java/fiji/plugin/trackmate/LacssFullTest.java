@@ -21,20 +21,17 @@
  */
 package fiji.plugin.trackmate;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import fiji.plugin.trackmate.detection.LabelImageDetectorFactory;
 import fiji.plugin.trackmate.gui.displaysettings.DisplaySettingsIO;
 import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
 import fiji.plugin.trackmate.visualization.hyperstack.HyperStackDisplayer;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 
 /**
  * Inspired by the BIOP approach.

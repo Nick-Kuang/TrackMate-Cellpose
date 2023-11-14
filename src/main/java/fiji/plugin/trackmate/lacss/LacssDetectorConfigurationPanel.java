@@ -1,18 +1,16 @@
 package fiji.plugin.trackmate.lacss;
 
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_CUSTOM_MODEL_FILEPATH;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_MODEL;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_PYTHON_FILEPATH;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_MIN_CELL_AREA;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LOGGER;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_RETURN_LABEL;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SCALING;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_NMS_IOU;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SEGMENTATION_THRESHOLD;
-import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_REMOVE_OUT_OF_BOUNDS;
 import static fiji.plugin.trackmate.gui.Fonts.BIG_FONT;
 import static fiji.plugin.trackmate.gui.Fonts.FONT;
 import static fiji.plugin.trackmate.gui.Fonts.SMALL_FONT;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_CUSTOM_MODEL_FILEPATH;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LACSS_MODEL;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_LOGGER;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_MIN_CELL_AREA;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_NMS_IOU;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_REMOVE_OUT_OF_BOUNDS;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SCALING;
+import static fiji.plugin.trackmate.lacss.LacssDetectorFactory.KEY_SEGMENTATION_THRESHOLD;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -31,7 +29,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -47,7 +44,6 @@ import javax.swing.SwingConstants;
 import fiji.plugin.trackmate.Logger;
 import fiji.plugin.trackmate.Model;
 import fiji.plugin.trackmate.Settings;
-import fiji.plugin.trackmate.lacss.LacssSettings.PretrainedModel;
 import fiji.plugin.trackmate.gui.components.ConfigurationPanel;
 import fiji.plugin.trackmate.util.DetectionPreview;
 import fiji.plugin.trackmate.util.FileChooser;
@@ -73,9 +69,9 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 
 	protected static final String DOC1_URL = "https://jiyuuchc.github.io/lacss/api/deploy/#lacss.deploy.Predictor";
 
-	private final JButton btnBrowseLacssPath;
+	// private final JButton btnBrowseLacssPath;
 
-	private final JTextField tfLacssExecutable;
+	// private final JTextField tfLacssExecutable;
 
 	private final JComboBox< PretrainedModel > cmbboxPretrainedModel;
 
@@ -91,7 +87,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 
 	private final Logger logger;
 
-	private final JCheckBox chckbx_return_label;
+	// private final JCheckBox chckbx_return_label;
 
 	private final JTextField tfCustomPath;
 
@@ -151,6 +147,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 				lblUrl.setText( "<html><a href=''>" + DOC1_URL + "</a></html>" );
 			}
 		} );
+
 		final GridBagConstraints gbcLblUrl = new GridBagConstraints();
 		gbcLblUrl.fill = GridBagConstraints.HORIZONTAL;
 		gbcLblUrl.gridwidth = 3;
@@ -163,35 +160,58 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		 * Path to Python or Lacss.
 		 */
 
-		final JLabel lblCusstomModelFile = new JLabel( "Path to Lacss / python executable:" );
-		lblCusstomModelFile.setFont( FONT );
-		final GridBagConstraints gbcLblCusstomModelFile = new GridBagConstraints();
-		gbcLblCusstomModelFile.gridwidth = 2;
-		gbcLblCusstomModelFile.anchor = GridBagConstraints.SOUTHWEST;
-		gbcLblCusstomModelFile.insets = new Insets( 0, 5, 5, 5 );
-		gbcLblCusstomModelFile.gridx = 0;
-		gbcLblCusstomModelFile.gridy = 2;
-		add( lblCusstomModelFile, gbcLblCusstomModelFile );
+		// final JLabel lblCusstomModelFile = new JLabel( "Path to Lacss / python executable:" );
+		// lblCusstomModelFile.setFont( FONT );
+		// final GridBagConstraints gbcLblCusstomModelFile = new GridBagConstraints();
+		// gbcLblCusstomModelFile.gridwidth = 2;
+		// gbcLblCusstomModelFile.anchor = GridBagConstraints.SOUTHWEST;
+		// gbcLblCusstomModelFile.insets = new Insets( 0, 5, 5, 5 );
+		// gbcLblCusstomModelFile.gridx = 0;
+		// gbcLblCusstomModelFile.gridy = 2;
+		// add( lblCusstomModelFile, gbcLblCusstomModelFile );
 
-		btnBrowseLacssPath = new JButton( "Browse" );
-		btnBrowseLacssPath.setFont( FONT );
-		final GridBagConstraints gbcBtnBrowseLacssPath = new GridBagConstraints();
-		gbcBtnBrowseLacssPath.insets = new Insets( 0, 0, 5, 0 );
-		gbcBtnBrowseLacssPath.anchor = GridBagConstraints.SOUTHEAST;
-		gbcBtnBrowseLacssPath.gridx = 2;
-		gbcBtnBrowseLacssPath.gridy = 2;
-		add( btnBrowseLacssPath, gbcBtnBrowseLacssPath );
+		// btnBrowseLacssPath = new JButton( "Browse" );
+		// btnBrowseLacssPath.setFont( FONT );
+		// final GridBagConstraints gbcBtnBrowseLacssPath = new GridBagConstraints();
+		// gbcBtnBrowseLacssPath.insets = new Insets( 0, 0, 5, 0 );
+		// gbcBtnBrowseLacssPath.anchor = GridBagConstraints.SOUTHEAST;
+		// gbcBtnBrowseLacssPath.gridx = 2;
+		// gbcBtnBrowseLacssPath.gridy = 2;
+		// add( btnBrowseLacssPath, gbcBtnBrowseLacssPath );
 
-		tfLacssExecutable = new JTextField( "" );
-		tfLacssExecutable.setFont( SMALL_FONT );
-		final GridBagConstraints gbcTfLacss = new GridBagConstraints();
-		gbcTfLacss.gridwidth = 3;
-		gbcTfLacss.insets = new Insets( 0, 5, 5, 0 );
-		gbcTfLacss.fill = GridBagConstraints.BOTH;
-		gbcTfLacss.gridx = 0;
-		gbcTfLacss.gridy = 3;
-		add( tfLacssExecutable, gbcTfLacss );
-		tfLacssExecutable.setColumns( 15 );
+		// tfLacssExecutable = new JTextField( "" );
+		// tfLacssExecutable.setFont( SMALL_FONT );
+		// final GridBagConstraints gbcTfLacss = new GridBagConstraints();
+		// gbcTfLacss.gridwidth = 3;
+		// gbcTfLacss.insets = new Insets( 0, 5, 5, 0 );
+		// gbcTfLacss.fill = GridBagConstraints.BOTH;
+		// gbcTfLacss.gridx = 0;
+		// gbcTfLacss.gridy = 3;
+		// add( tfLacssExecutable, gbcTfLacss );
+		// tfLacssExecutable.setColumns( 15 );
+
+		/*
+		 * Pretrained model.
+		 */
+
+		final JLabel lblPretrainedModel = new JLabel( "Pretrained model:" );
+		lblPretrainedModel.setFont( SMALL_FONT );
+		final GridBagConstraints gbcLblPretrainedModel = new GridBagConstraints();
+		gbcLblPretrainedModel.anchor = GridBagConstraints.EAST;
+		gbcLblPretrainedModel.insets = new Insets( 0, 5, 5, 5 );
+		gbcLblPretrainedModel.gridx = 0;
+		gbcLblPretrainedModel.gridy = 6;
+		add( lblPretrainedModel, gbcLblPretrainedModel );
+
+		cmbboxPretrainedModel = new JComboBox<>( new Vector<>( Arrays.asList( PretrainedModel.values() ) ) );
+		cmbboxPretrainedModel.setFont( SMALL_FONT );
+		final GridBagConstraints gbcCmbboxPretrainedModel = new GridBagConstraints();
+		gbcCmbboxPretrainedModel.gridwidth = 2;
+		gbcCmbboxPretrainedModel.insets = new Insets( 0, 5, 5, 0 );
+		gbcCmbboxPretrainedModel.fill = GridBagConstraints.HORIZONTAL;
+		gbcCmbboxPretrainedModel.gridx = 1;
+		gbcCmbboxPretrainedModel.gridy = 6;
+		add( cmbboxPretrainedModel, gbcCmbboxPretrainedModel );
 
 		/*
 		 * Custom model.
@@ -228,29 +248,6 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		add( tfCustomPath, gbcTfCustomPath );
 
 		/*
-		 * Pretrained model.
-		 */
-
-		final JLabel lblPretrainedModel = new JLabel( "Pretrained model:" );
-		lblPretrainedModel.setFont( SMALL_FONT );
-		final GridBagConstraints gbcLblPretrainedModel = new GridBagConstraints();
-		gbcLblPretrainedModel.anchor = GridBagConstraints.EAST;
-		gbcLblPretrainedModel.insets = new Insets( 0, 5, 5, 5 );
-		gbcLblPretrainedModel.gridx = 0;
-		gbcLblPretrainedModel.gridy = 6;
-		add( lblPretrainedModel, gbcLblPretrainedModel );
-
-		cmbboxPretrainedModel = new JComboBox<>( new Vector<>( Arrays.asList( PretrainedModel.values() ) ) );
-		cmbboxPretrainedModel.setFont( SMALL_FONT );
-		final GridBagConstraints gbcCmbboxPretrainedModel = new GridBagConstraints();
-		gbcCmbboxPretrainedModel.gridwidth = 2;
-		gbcCmbboxPretrainedModel.insets = new Insets( 0, 5, 5, 0 );
-		gbcCmbboxPretrainedModel.fill = GridBagConstraints.HORIZONTAL;
-		gbcCmbboxPretrainedModel.gridx = 1;
-		gbcCmbboxPretrainedModel.gridy = 6;
-		add( cmbboxPretrainedModel, gbcCmbboxPretrainedModel );
-
-		/*
 		* Min Cell Area.
 		*/
 
@@ -283,15 +280,15 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 
 		//* Return Label */
 
-		chckbx_return_label = new JCheckBox( "Return Label:" );
-		chckbx_return_label.setHorizontalTextPosition( SwingConstants.LEFT );
-		chckbx_return_label.setFont( SMALL_FONT );
-		final GridBagConstraints gbcChckbx_return_label = new GridBagConstraints();
-		gbcChckbx_return_label.anchor = GridBagConstraints.EAST;
-		gbcChckbx_return_label.insets = new Insets( 0, 0, 0, 5 );
-		gbcChckbx_return_label.gridx = 0;
-		gbcChckbx_return_label.gridy = 13;
-		add( chckbx_return_label, gbcChckbx_return_label );
+		// chckbx_return_label = new JCheckBox( "Return Label:" );
+		// chckbx_return_label.setHorizontalTextPosition( SwingConstants.LEFT );
+		// chckbx_return_label.setFont( SMALL_FONT );
+		// final GridBagConstraints gbcChckbx_return_label = new GridBagConstraints();
+		// gbcChckbx_return_label.anchor = GridBagConstraints.EAST;
+		// gbcChckbx_return_label.insets = new Insets( 0, 0, 0, 5 );
+		// gbcChckbx_return_label.gridx = 0;
+		// gbcChckbx_return_label.gridy = 13;
+		// add( chckbx_return_label, gbcChckbx_return_label );
 
 		/* Scaling Factor*/
 
@@ -335,7 +332,7 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		gbcFtfnms_iou.gridy = 11;
 		add( ftfnms_iou, gbcFtfnms_iou );
 
-		/* 	The minimal prediction scores.: Default : 0.5 ;; I think this might be uncessary, I want to incorporate Trackmates histo scaler in future but add for now   */
+		/* 	The minimal prediction scores.: Default : 0.5 */
 
 		final JLabel lblsegmentation_threshold = new JLabel( "Segmentation Treshold:" );
 		lblsegmentation_threshold.setFont( SMALL_FONT );
@@ -422,7 +419,8 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		cmbboxPretrainedModel.addItemListener( l3 );
 		l3.itemStateChanged( null );
 
-		btnBrowseLacssPath.addActionListener( l -> browseLacssPath() );
+		// btnBrowseLacssPath.addActionListener( l -> browseLacssPath() );
+		
 		btnBrowseCustomModel.addActionListener( l -> browseCustomModelPath() );
 	}
 
@@ -442,30 +440,30 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 		}
 	}
 
-	protected void browseLacssPath()
-	{
-		btnBrowseLacssPath.setEnabled( false );
-		try
-		{
-			final File file = FileChooser.chooseFile( this, tfLacssExecutable.getText(), null,
-					"Browse to the Lacss Python executable", DialogType.LOAD, SelectionMode.FILES_ONLY );
-			if ( file != null )
-				tfLacssExecutable.setText( file.getAbsolutePath() );
-		}
-		finally
-		{
-			btnBrowseLacssPath.setEnabled( true );
-		}
-	}
+	// protected void browseLacssPath()
+	// {
+	// 	btnBrowseLacssPath.setEnabled( false );
+	// 	try
+	// 	{
+	// 		final File file = FileChooser.chooseFile( this, tfLacssExecutable.getText(), null,
+	// 				"Browse to the Lacss Python executable", DialogType.LOAD, SelectionMode.FILES_ONLY );
+	// 		if ( file != null )
+	// 			tfLacssExecutable.setText( file.getAbsolutePath() );
+	// 	}
+	// 	finally
+	// 	{
+	// 		btnBrowseLacssPath.setEnabled( true );
+	// 	}
+	// }
 
 	@Override
 	public void setSettings( final Map< String, Object > settings )
 	{
-		tfLacssExecutable.setText( ( String ) settings.get( KEY_LACSS_PYTHON_FILEPATH ) );
+		// tfLacssExecutable.setText( ( String ) settings.get( KEY_LACSS_PYTHON_FILEPATH ) );
 		tfCustomPath.setText( ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH ) );
 		cmbboxPretrainedModel.setSelectedItem( settings.get( KEY_LACSS_MODEL ) );
 		ftfmin_cell_area.setValue( settings.get( KEY_MIN_CELL_AREA ) );
-		chckbx_return_label.setSelected( ( boolean ) settings.get( KEY_RETURN_LABEL ) );
+		// chckbx_return_label.setSelected( ( boolean ) settings.get( KEY_RETURN_LABEL ) );
 		chckbxBounds.setSelected( ( boolean ) settings.get( KEY_REMOVE_OUT_OF_BOUNDS ) );
 		ftfmin_scaling.setValue( settings.get( KEY_SCALING));
 		ftfnms_iou.setValue(settings.get(KEY_NMS_IOU));
@@ -477,14 +475,14 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 	{
 		final HashMap< String, Object > settings = new HashMap<>( 9 );
 
-		settings.put( KEY_LACSS_PYTHON_FILEPATH, tfLacssExecutable.getText() );
+		// settings.put( KEY_LACSS_PYTHON_FILEPATH, tfLacssExecutable.getText() );
 		settings.put( KEY_LACSS_CUSTOM_MODEL_FILEPATH, tfCustomPath.getText() );
 		settings.put( KEY_LACSS_MODEL, cmbboxPretrainedModel.getSelectedItem() );
 
 		final double min_cell_area = ( ( Number ) ftfmin_cell_area.getValue() ).doubleValue();
 		settings.put( KEY_MIN_CELL_AREA, min_cell_area );
 		settings.put( KEY_REMOVE_OUT_OF_BOUNDS, chckbxBounds.isSelected() );
-		settings.put( KEY_RETURN_LABEL, chckbx_return_label.isSelected() );
+		// settings.put( KEY_RETURN_LABEL, chckbx_return_label.isSelected() );
 		
 		final double scaling = ( ( Number) ftfmin_scaling.getValue()).doubleValue();
 		settings.put ( KEY_SCALING, scaling );
@@ -501,4 +499,31 @@ public class LacssDetectorConfigurationPanel extends ConfigurationPanel
 	@Override
 	public void clean()
 	{} 
+
+	public enum PretrainedModel
+	{
+		Default("Default", ""),
+		CUSTOM( "Custom", "" );
+
+		private final String name;
+
+		private final String path;
+
+		PretrainedModel( final String name, final String path )
+		{
+			this.name = name;
+			this.path = path;
+		}
+
+		@Override
+		public String toString()
+		{
+			return name;
+		}
+
+		public String lacssName()
+		{
+			return path;
+		}
+	}
 }

@@ -10,43 +10,51 @@ import net.imagej.ImgPlus;
 import net.imagej.axis.Axes;
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
-import net.imglib2.img.display.imagej.ImgPlusViews;
-import net.imglib2.type.Type;
 
 public class LacssUtils 
 {
 
-	public static < T extends Type< T > > ImgPlus< T > hyperSlice( final ImgPlus< T > img, final long frame )
-	{
-		final int timeDim = img.dimensionIndex( Axes.TIME );
-		final ImgPlus< T > imgTC = timeDim < 0
-				? img
-				: ImgPlusViews.hyperSlice( img, timeDim, frame );
+	// public static < T extends Type< T > > ImgPlus< T > hyperSlice( final ImgPlus< T > img, final long frame )
+	// {
+	// 	final int timeDim = img.dimensionIndex( Axes.TIME );
+	// 	final ImgPlus< T > imgTC = timeDim < 0
+	// 			? img
+	// 			: ImgPlusViews.hyperSlice( img, timeDim, frame );
 
-		// Squeeze Z dimension if its size is 1.
-		final int zDim = imgTC.dimensionIndex( Axes.Z );
-		final ImgPlus< T > imgTCZ;
-		if ( zDim >= 0 && imgTC.dimension( zDim ) <= 1 )
-			imgTCZ = ImgPlusViews.hyperSlice( imgTC, zDim, imgTC.min( zDim ) );
-		else
-			imgTCZ = imgTC;
+	// 	// Squeeze Z dimension if its size is 1.
+	// 	final int zDim = imgTC.dimensionIndex( Axes.Z );
+	// 	final ImgPlus< T > imgTCZ;
+	// 	if ( zDim >= 0 && imgTC.dimension( zDim ) <= 1 )
+	// 		imgTCZ = ImgPlusViews.hyperSlice( imgTC, zDim, imgTC.min( zDim ) );
+	// 	else
+	// 		imgTCZ = imgTC;
 
-		return imgTCZ;
-	}
+	// 	return imgTCZ;
+	// }
 
 	public static URL getResource( final String name )
 	{
-		return LacssDetectorFactory.class.getClassLoader().getResource( name );
+		return LacssDetectorFactory.class.getResource( name );
 	}
 
 	public static final ImageIcon logo()
 	{
-		return new ImageIcon( getResource( "images/mimilogo.jpg" ) );
+		URL icon = getResource( "/images/mimilogo.jpg" );
+		if (icon == null) {
+			return null;
+		}
+		else {
+			return new ImageIcon( icon );
+		}
 	}
 
 	public static final ImageIcon logo64()
 	{
-		return scaleImage( logo(), 64, 64 );
+		ImageIcon icon = logo();
+		if (icon != null)
+			return scaleImage( logo(), 64, 64 );
+		else 
+			return null;
 	}
 
 	public static final ImageIcon scaleImage( final ImageIcon icon, final int w, final int h )
