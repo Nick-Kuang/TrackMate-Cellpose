@@ -45,7 +45,7 @@ public class LacssFullTest
 		ImageJ.main( args );
 
 
-		final ImagePlus imp = IJ.openImage( "../s1.avi" );
+		final ImagePlus imp = IJ.openImage( "../s1.tif" );
 		imp.show();
 		
 		final LacssSettings cp = LacssSettings.DEFAULT;

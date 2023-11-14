@@ -44,7 +44,7 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
-public class LacssDetector< T extends RealType< T > & NativeType< T > > implements SpotGlobalDetector< T >, Cancelable, MultiThreaded
+public class LacssDetector< T extends RealType< T > & NativeType< T > > implements SpotGlobalDetector< T >, Cancelable
 {
 	private final static String BASE_ERROR_MESSAGE = "LacssDetector: ";
 
@@ -430,25 +430,4 @@ public class LacssDetector< T extends RealType< T > & NativeType< T > > implemen
 	{
 		return cancelReason;
 	}
-
-	// --- Multithreaded methods ---
-
-	@Override
-	public void setNumThreads()
-	{
-		// no op
-	}
-
-	@Override
-	public void setNumThreads( final int numThreads )
-	{
-		// no op
-	}
-
-	@Override
-	public int getNumThreads()
-	{
-		return 1;
-	}
-
 }

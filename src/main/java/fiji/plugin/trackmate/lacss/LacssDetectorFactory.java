@@ -2,7 +2,6 @@ package fiji.plugin.trackmate.lacss;
 
 import static fiji.plugin.trackmate.io.IOUtils.readBooleanAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readDoubleAttribute;
-import static fiji.plugin.trackmate.io.IOUtils.readIntegerAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.readStringAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.writeAttribute;
 import static fiji.plugin.trackmate.io.IOUtils.writeTargetChannel;
@@ -18,7 +17,6 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.jdom2.Element;
 import org.scijava.plugin.Plugin;
 
@@ -51,6 +49,8 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	public static final String KEY_LACSS_PYTHON_FILEPATH = "LACSS_PYTHON_FILEPATH";
 	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = "/Fiji/plugins/TrackMate/lacss/lacss.py";
 
+	public static final String KEY_TARGET_CHANNEL = "LACSS_CHANNEL";
+	public static final int DEFAULT_TARGET_CHANNEL = 1;
 
 	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.LiveCell;
 
@@ -68,10 +68,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		return pyscript.getAbsolutePath();
 	}
 	
-	public static final String KEY_LACSS_PYTHON_FILEPATH = "LACSS_PYTHON_FILEPATH";
-
-	public static final String DEFAULT_LACSS_PYTHON_FILEPATH = getResource("scripts/lacss_test.py");
-
 	/**
 	 * The key to the parameter that stores the path to the custom model file to
 	 * use with Cellpose. It must be an absolute file path.
@@ -93,7 +89,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 * Cellpose determine this automatically (but it will take a bit longer).
 	 */
 	public static final String KEY_MIN_CELL_AREA = "MIN_CELL_AREA";
-
 	public static final Double DEFAULT_MIN_CELL_AREA = Double.valueOf( 0. );
 
 	/**
@@ -104,9 +99,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 */
 	public static final String KEY_LOGGER = "LOGGER";
 	public static final String LACSS_DETECTOR_KEY = "LACSS_DETECTOR";
-
-	public static final String KEY_MIN_CELL_AREA = "MIN_CELL_AREA";
-	public static final Double DEFAULT_MIN_CELL_AREA = Double.valueOf( 0. );
 
 	// remove detections for which the predicted centroid is out of image bound
 	public static final String KEY_REMOVE_OUT_OF_BOUNDS = "REMOVE_OUT_OF_BOUNDS"; 
