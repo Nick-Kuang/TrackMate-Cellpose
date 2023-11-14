@@ -30,6 +30,8 @@ import fiji.plugin.trackmate.Model;
 import fiji.plugin.trackmate.Settings;
 import fiji.plugin.trackmate.lacss.LacssDetectorFactory;
 import fiji.plugin.trackmate.lacss.LacssSettings.PretrainedModel;
+import fiji.plugin.trackmate.detection.DetectionUtils;
+import fiji.plugin.trackmate.detection.SpotDetector;
 import fiji.plugin.trackmate.detection.SpotDetectorFactory;
 import fiji.plugin.trackmate.detection.SpotDetectorFactoryBase;
 import fiji.plugin.trackmate.detection.SpotGlobalDetector;
@@ -37,12 +39,15 @@ import fiji.plugin.trackmate.detection.SpotGlobalDetectorFactory;
 import fiji.plugin.trackmate.gui.components.ConfigurationPanel;
 import fiji.plugin.trackmate.util.TMUtils;
 import net.imagej.ImgPlus;
+import net.imagej.axis.Axes;
 import net.imglib2.Interval;
+import net.imglib2.RandomAccessible;
+import net.imglib2.img.display.imagej.ImgPlusViews;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 
 @Plugin( type = SpotDetectorFactory.class )
-public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > implements SpotGlobalDetectorFactory< T > 
+public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > implements SpotDetectorFactory< T > 
 {
 
 	/*
@@ -60,27 +65,11 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	public static final PretrainedModel DEFAULT_LACSS_MODEL = PretrainedModel.LiveCell;
 
 	/**
-	 * The key to the parameter that stores the path to the Python instance that
-	 * can run cellpose if you installed it via Conda or the cellpose executable
-	 * if you have installed the standalone version. Something like
-	 * '/opt/anaconda3/envs/cellpose/bin/python' or
-	 * 'C:\Users\tinevez\Applications\cellpose.exe'.
-	 */
-	
-	public static String getResource(final String name )
-	{
-		File pyscript = new File(LacssDetectorFactory.class.getClassLoader().getResource(name).getFile());
-		return pyscript.getAbsolutePath();
-	}
-	
-	/**
 	 * The key to the parameter that stores the path to the custom model file to
 	 * use with Cellpose. It must be an absolute file path.
 	 */
 	public static final String KEY_LACSS_CUSTOM_MODEL_FILEPATH = "LACSS_MODEL_FILEPATH";
 	public static final String DEFAULT_LACSS_CUSTOM_MODEL_FILEPATH = "";
-	// public static final String KEY_OPTIONAL_CHANNEL_2 = "OPTIONAL_CHANNEL_2";
-	// public static final Integer DEFAULT_OPTIONAL_CHANNEL_2 = Integer.valueOf( 0 );
 	public static final String KEY_RETURN_LABEL = "RETURN_LABEL";
 	public static final boolean DEFAULT_RETURN_LABEL = Boolean.valueOf(false);
 
@@ -141,7 +130,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 			+ "<a href=\"https://imagej.net/plugins/trackmate/trackmate-cellpose\">on the ImageJ Wiki</a>."
 			+ "</html>";
 
-	// resource settings
+	// resources
 	static final String PY_SCRIPT_PATH = "/scripts/lacss_server.py"; // resource path to the .py
 	static final String MODEL_PATH = "/model/lacss_default.pkl"; // resource path to the model file
 
@@ -149,7 +138,7 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	 * FIELDS
 	 */
 
-	/** The image to operate on. Multiple frames, single channel. */
+	/** The image to operate on. Multiple frames, multiple channels. */
 	protected ImgPlus< T > img;
 
 	protected Map< String, Object > settings;
@@ -157,8 +146,10 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	protected String errorMessage;
 
 	protected static Process pyServer = null; // the py process that does the computation
-	private static String pyFilePath;
-	private static String modelPath;
+
+	protected static String pyFilePath;
+
+	protected static String modelPath;
 
 	/*
 	 * METHODS
@@ -228,8 +219,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final String customModelPath = ( String ) settings.get( KEY_LACSS_CUSTOM_MODEL_FILEPATH );
 
 		final boolean return_label = ( boolean ) settings.get( KEY_RETURN_LABEL );
-		// final int channel = ( Integer ) settings.get( KEY_TARGET_CHANNEL );
-		// final int channel2 = ( Integer ) settings.get( KEY_OPTIONAL_CHANNEL_2 );
 
 		// Convert to diameter in pixels.
 		final double[] calibration = TMUtils.getSpatialCalibration( img );
@@ -256,10 +245,20 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 	}
 
 	@Override
-	public SpotGlobalDetector< T > getDetector( final Interval interval )
+	public SpotDetector< T > getDetector( final Interval interval, final int frame )
 	{
+		// final boolean simplifyContours = false; //( Boolean ) settings.get( KEY_SIMPLIFY_CONTOURS );
+		// final double[] calibration = TMUtils.getSpatialCalibration( img );
+
+		final ImgPlus< T > singleTimePoint;
+
+		if ( img.dimensionIndex( Axes.TIME ) < 0 )
+			singleTimePoint = img;
+		else
+			singleTimePoint = ImgPlusViews.hyperSlice( img, img.dimensionIndex( Axes.TIME ), frame );
+
 		final LacssDetector< T > detector = new LacssDetector<T>(
-				img,
+				singleTimePoint,
 				interval,
 				getLacssSettings(),
 				( Logger ) settings.get( KEY_LOGGER ),
@@ -369,8 +368,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		final StringBuilder errorHolder = new StringBuilder();
 		ok = ok & checkParameter( settings, KEY_LACSS_PYTHON_FILEPATH, String.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_CUSTOM_MODEL_FILEPATH, String.class, errorHolder );
-		// ok = ok & checkParameter( settings, KEY_TARGET_CHANNEL, Integer.class, errorHolder );
-		// ok = ok & checkParameter( settings, KEY_OPTIONAL_CHANNEL_2, Integer.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_LACSS_MODEL, PretrainedModel.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_MIN_CELL_AREA, Double.class, errorHolder );
 		ok = ok & checkParameter( settings, KEY_RETURN_LABEL, Boolean.class, errorHolder );
@@ -406,22 +403,6 @@ public class LacssDetectorFactory< T extends RealType< T > & NativeType< T > > i
 		if ( !ok )
 			errorMessage = errorHolder.toString();
 
-		// Extra test to make sure we can read the classifier file.
-		// if ( ok )
-		// {
-		// 	final Object obj = settings.get( KEY_LACSS_PYTHON_FILEPATH );
-		// 	if ( obj == null )
-		// 	{
-		// 		errorMessage = "The path to the Lacss python script cannot be found.";
-		// 		return false;
-		// 	}
-
-		// 	if ( !IOUtils.canReadFile( ( String ) obj, errorHolder ) )
-		// 	{
-		// 		errorMessage = "Problem with Lacss python script: " + errorHolder.toString();
-		// 		return false;
-		// 	}
-		// }
 		return ok;
 	}
 

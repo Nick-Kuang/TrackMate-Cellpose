@@ -108,18 +108,10 @@ public class LacssSettings
 		return new Builder();
 	}
 
-	public static String getResource(final String name )
-	{
-		File script = new File(LacssSettings.class.getClassLoader().getResource(name).getFile());
-		return script.getAbsolutePath();
-	}
-
 	public static final class Builder
 	{
 		
-		//private String lacssPythonPath = getResource("scripts/lacss_script.py");
-
-		private String lacssPythonPath = getResource("scripts/lacss_test.py");
+		private String lacssPythonPath = "";
 
 		private PretrainedModel model = PretrainedModel.LiveCell;
 
