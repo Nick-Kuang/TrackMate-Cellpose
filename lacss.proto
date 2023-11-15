@@ -17,12 +17,6 @@ message Image {
     bytes data = 5;
 }
 
-message Result {
-    uint64 height = 1;
-    uint64 width = 2;
-    bytes data = 6;
-}
-
 message Settings {
     float min_cell_area = 1;
 	bool remove_out_of_bound = 2;
@@ -35,4 +29,15 @@ message Settings {
 message Input {
     Settings settings = 1;
     Image image = 2;
+}
+
+message Label {
+    uint64 height = 1;
+    uint64 width = 2;
+    bytes data = 6;
+}
+
+message Result {
+    Label score = 1;
+    Label label = 2;
 }

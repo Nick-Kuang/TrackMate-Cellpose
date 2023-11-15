@@ -184,6 +184,74 @@ public final class LacssMsg {
       return new Image();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Image(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              height_ = input.readUInt64();
+              break;
+            }
+            case 16: {
+
+              width_ = input.readUInt64();
+              break;
+            }
+            case 24: {
+
+              channel_ = input.readUInt64();
+              break;
+            }
+            case 32: {
+              int rawValue = input.readEnum();
+
+              dtype_ = rawValue;
+              break;
+            }
+            case 42: {
+
+              data_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Image_descriptor;
@@ -198,7 +266,7 @@ public final class LacssMsg {
     }
 
     public static final int HEIGHT_FIELD_NUMBER = 1;
-    private long height_ = 0L;
+    private long height_;
     /**
      * <code>uint64 height = 1;</code>
      * @return The height.
@@ -209,7 +277,7 @@ public final class LacssMsg {
     }
 
     public static final int WIDTH_FIELD_NUMBER = 2;
-    private long width_ = 0L;
+    private long width_;
     /**
      * <code>uint64 width = 2;</code>
      * @return The width.
@@ -220,7 +288,7 @@ public final class LacssMsg {
     }
 
     public static final int CHANNEL_FIELD_NUMBER = 3;
-    private long channel_ = 0L;
+    private long channel_;
     /**
      * <code>uint64 channel = 3;</code>
      * @return The channel.
@@ -231,7 +299,7 @@ public final class LacssMsg {
     }
 
     public static final int DTYPE_FIELD_NUMBER = 4;
-    private int dtype_ = 0;
+    private int dtype_;
     /**
      * <code>.trackmate.lacss.DType dtype = 4;</code>
      * @return The enum numeric value on the wire for dtype.
@@ -244,12 +312,13 @@ public final class LacssMsg {
      * @return The dtype.
      */
     @java.lang.Override public fiji.plugin.trackmate.lacss.LacssMsg.DType getDtype() {
-      fiji.plugin.trackmate.lacss.LacssMsg.DType result = fiji.plugin.trackmate.lacss.LacssMsg.DType.forNumber(dtype_);
+      @SuppressWarnings("deprecation")
+      fiji.plugin.trackmate.lacss.LacssMsg.DType result = fiji.plugin.trackmate.lacss.LacssMsg.DType.valueOf(dtype_);
       return result == null ? fiji.plugin.trackmate.lacss.LacssMsg.DType.UNRECOGNIZED : result;
     }
 
     public static final int DATA_FIELD_NUMBER = 5;
-    private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+    private com.google.protobuf.ByteString data_;
     /**
      * <code>bytes data = 5;</code>
      * @return The data.
@@ -288,7 +357,7 @@ public final class LacssMsg {
       if (!data_.isEmpty()) {
         output.writeBytes(5, data_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -317,7 +386,7 @@ public final class LacssMsg {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, data_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -341,7 +410,7 @@ public final class LacssMsg {
       if (dtype_ != other.dtype_) return false;
       if (!getData()
           .equals(other.getData())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -365,7 +434,7 @@ public final class LacssMsg {
       hash = (53 * hash) + dtype_;
       hash = (37 * hash) + DATA_FIELD_NUMBER;
       hash = (53 * hash) + getData().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -414,13 +483,11 @@ public final class LacssMsg {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static fiji.plugin.trackmate.lacss.LacssMsg.Image parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static fiji.plugin.trackmate.lacss.LacssMsg.Image parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -484,23 +551,32 @@ public final class LacssMsg {
 
       // Construct using fiji.plugin.trackmate.lacss.LacssMsg.Image.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         height_ = 0L;
+
         width_ = 0L;
+
         channel_ = 0L;
+
         dtype_ = 0;
+
         data_ = com.google.protobuf.ByteString.EMPTY;
+
         return this;
       }
 
@@ -527,28 +603,13 @@ public final class LacssMsg {
       @java.lang.Override
       public fiji.plugin.trackmate.lacss.LacssMsg.Image buildPartial() {
         fiji.plugin.trackmate.lacss.LacssMsg.Image result = new fiji.plugin.trackmate.lacss.LacssMsg.Image(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.height_ = height_;
+        result.width_ = width_;
+        result.channel_ = channel_;
+        result.dtype_ = dtype_;
+        result.data_ = data_;
         onBuilt();
         return result;
-      }
-
-      private void buildPartial0(fiji.plugin.trackmate.lacss.LacssMsg.Image result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.height_ = height_;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.width_ = width_;
-        }
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.channel_ = channel_;
-        }
-        if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.dtype_ = dtype_;
-        }
-        if (((from_bitField0_ & 0x00000010) != 0)) {
-          result.data_ = data_;
-        }
       }
 
       @java.lang.Override
@@ -610,7 +671,7 @@ public final class LacssMsg {
         if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
           setData(other.getData());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -625,58 +686,19 @@ public final class LacssMsg {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        fiji.plugin.trackmate.lacss.LacssMsg.Image parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                height_ = input.readUInt64();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 8
-              case 16: {
-                width_ = input.readUInt64();
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 16
-              case 24: {
-                channel_ = input.readUInt64();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 24
-              case 32: {
-                dtype_ = input.readEnum();
-                bitField0_ |= 0x00000008;
-                break;
-              } // case 32
-              case 42: {
-                data_ = input.readBytes();
-                bitField0_ |= 0x00000010;
-                break;
-              } // case 42
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (fiji.plugin.trackmate.lacss.LacssMsg.Image) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private long height_ ;
       /**
@@ -693,9 +715,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setHeight(long value) {
-
+        
         height_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -704,7 +725,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearHeight() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        
         height_ = 0L;
         onChanged();
         return this;
@@ -725,9 +746,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setWidth(long value) {
-
+        
         width_ = value;
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -736,7 +756,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearWidth() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         width_ = 0L;
         onChanged();
         return this;
@@ -757,9 +777,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setChannel(long value) {
-
+        
         channel_ = value;
-        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -768,7 +787,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearChannel() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        
         channel_ = 0L;
         onChanged();
         return this;
@@ -788,8 +807,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setDtypeValue(int value) {
+        
         dtype_ = value;
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -799,7 +818,8 @@ public final class LacssMsg {
        */
       @java.lang.Override
       public fiji.plugin.trackmate.lacss.LacssMsg.DType getDtype() {
-        fiji.plugin.trackmate.lacss.LacssMsg.DType result = fiji.plugin.trackmate.lacss.LacssMsg.DType.forNumber(dtype_);
+        @SuppressWarnings("deprecation")
+        fiji.plugin.trackmate.lacss.LacssMsg.DType result = fiji.plugin.trackmate.lacss.LacssMsg.DType.valueOf(dtype_);
         return result == null ? fiji.plugin.trackmate.lacss.LacssMsg.DType.UNRECOGNIZED : result;
       }
       /**
@@ -811,7 +831,7 @@ public final class LacssMsg {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000008;
+        
         dtype_ = value.getNumber();
         onChanged();
         return this;
@@ -821,7 +841,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearDtype() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        
         dtype_ = 0;
         onChanged();
         return this;
@@ -842,9 +862,11 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setData(com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         data_ = value;
-        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -853,7 +875,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -891,18 +913,7 @@ public final class LacssMsg {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new Image(input, extensionRegistry);
       }
     };
 
@@ -917,629 +928,6 @@ public final class LacssMsg {
 
     @java.lang.Override
     public fiji.plugin.trackmate.lacss.LacssMsg.Image getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface ResultOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:trackmate.lacss.Result)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>uint64 height = 1;</code>
-     * @return The height.
-     */
-    long getHeight();
-
-    /**
-     * <code>uint64 width = 2;</code>
-     * @return The width.
-     */
-    long getWidth();
-
-    /**
-     * <code>bytes data = 6;</code>
-     * @return The data.
-     */
-    com.google.protobuf.ByteString getData();
-  }
-  /**
-   * Protobuf type {@code trackmate.lacss.Result}
-   */
-  public static final class Result extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:trackmate.lacss.Result)
-      ResultOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use Result.newBuilder() to construct.
-    private Result(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private Result() {
-      data_ = com.google.protobuf.ByteString.EMPTY;
-    }
-
-    @java.lang.Override
-    @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
-      return new Result();
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_descriptor;
-    }
-
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              fiji.plugin.trackmate.lacss.LacssMsg.Result.class, fiji.plugin.trackmate.lacss.LacssMsg.Result.Builder.class);
-    }
-
-    public static final int HEIGHT_FIELD_NUMBER = 1;
-    private long height_ = 0L;
-    /**
-     * <code>uint64 height = 1;</code>
-     * @return The height.
-     */
-    @java.lang.Override
-    public long getHeight() {
-      return height_;
-    }
-
-    public static final int WIDTH_FIELD_NUMBER = 2;
-    private long width_ = 0L;
-    /**
-     * <code>uint64 width = 2;</code>
-     * @return The width.
-     */
-    @java.lang.Override
-    public long getWidth() {
-      return width_;
-    }
-
-    public static final int DATA_FIELD_NUMBER = 6;
-    private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
-    /**
-     * <code>bytes data = 6;</code>
-     * @return The data.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString getData() {
-      return data_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @java.lang.Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (height_ != 0L) {
-        output.writeUInt64(1, height_);
-      }
-      if (width_ != 0L) {
-        output.writeUInt64(2, width_);
-      }
-      if (!data_.isEmpty()) {
-        output.writeBytes(6, data_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    @java.lang.Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (height_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(1, height_);
-      }
-      if (width_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(2, width_);
-      }
-      if (!data_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, data_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof fiji.plugin.trackmate.lacss.LacssMsg.Result)) {
-        return super.equals(obj);
-      }
-      fiji.plugin.trackmate.lacss.LacssMsg.Result other = (fiji.plugin.trackmate.lacss.LacssMsg.Result) obj;
-
-      if (getHeight()
-          != other.getHeight()) return false;
-      if (getWidth()
-          != other.getWidth()) return false;
-      if (!getData()
-          .equals(other.getData())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-      return true;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getHeight());
-      hash = (37 * hash) + WIDTH_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getWidth());
-      hash = (37 * hash) + DATA_FIELD_NUMBER;
-      hash = (53 * hash) + getData().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(fiji.plugin.trackmate.lacss.LacssMsg.Result prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @java.lang.Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code trackmate.lacss.Result}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:trackmate.lacss.Result)
-        fiji.plugin.trackmate.lacss.LacssMsg.ResultOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_descriptor;
-      }
-
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                fiji.plugin.trackmate.lacss.LacssMsg.Result.class, fiji.plugin.trackmate.lacss.LacssMsg.Result.Builder.class);
-      }
-
-      // Construct using fiji.plugin.trackmate.lacss.LacssMsg.Result.newBuilder()
-      private Builder() {
-
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-
-      }
-      @java.lang.Override
-      public Builder clear() {
-        super.clear();
-        bitField0_ = 0;
-        height_ = 0L;
-        width_ = 0L;
-        data_ = com.google.protobuf.ByteString.EMPTY;
-        return this;
-      }
-
-      @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_descriptor;
-      }
-
-      @java.lang.Override
-      public fiji.plugin.trackmate.lacss.LacssMsg.Result getDefaultInstanceForType() {
-        return fiji.plugin.trackmate.lacss.LacssMsg.Result.getDefaultInstance();
-      }
-
-      @java.lang.Override
-      public fiji.plugin.trackmate.lacss.LacssMsg.Result build() {
-        fiji.plugin.trackmate.lacss.LacssMsg.Result result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @java.lang.Override
-      public fiji.plugin.trackmate.lacss.LacssMsg.Result buildPartial() {
-        fiji.plugin.trackmate.lacss.LacssMsg.Result result = new fiji.plugin.trackmate.lacss.LacssMsg.Result(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
-        onBuilt();
-        return result;
-      }
-
-      private void buildPartial0(fiji.plugin.trackmate.lacss.LacssMsg.Result result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.height_ = height_;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.width_ = width_;
-        }
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.data_ = data_;
-        }
-      }
-
-      @java.lang.Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @java.lang.Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.setField(field, value);
-      }
-      @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @java.lang.Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @java.lang.Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return super.addRepeatedField(field, value);
-      }
-      @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof fiji.plugin.trackmate.lacss.LacssMsg.Result) {
-          return mergeFrom((fiji.plugin.trackmate.lacss.LacssMsg.Result)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(fiji.plugin.trackmate.lacss.LacssMsg.Result other) {
-        if (other == fiji.plugin.trackmate.lacss.LacssMsg.Result.getDefaultInstance()) return this;
-        if (other.getHeight() != 0L) {
-          setHeight(other.getHeight());
-        }
-        if (other.getWidth() != 0L) {
-          setWidth(other.getWidth());
-        }
-        if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
-          setData(other.getData());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        onChanged();
-        return this;
-      }
-
-      @java.lang.Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @java.lang.Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                height_ = input.readUInt64();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 8
-              case 16: {
-                width_ = input.readUInt64();
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 16
-              case 50: {
-                data_ = input.readBytes();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 50
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.unwrapIOException();
-        } finally {
-          onChanged();
-        } // finally
-        return this;
-      }
-      private int bitField0_;
-
-      private long height_ ;
-      /**
-       * <code>uint64 height = 1;</code>
-       * @return The height.
-       */
-      @java.lang.Override
-      public long getHeight() {
-        return height_;
-      }
-      /**
-       * <code>uint64 height = 1;</code>
-       * @param value The height to set.
-       * @return This builder for chaining.
-       */
-      public Builder setHeight(long value) {
-
-        height_ = value;
-        bitField0_ |= 0x00000001;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>uint64 height = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearHeight() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        height_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private long width_ ;
-      /**
-       * <code>uint64 width = 2;</code>
-       * @return The width.
-       */
-      @java.lang.Override
-      public long getWidth() {
-        return width_;
-      }
-      /**
-       * <code>uint64 width = 2;</code>
-       * @param value The width to set.
-       * @return This builder for chaining.
-       */
-      public Builder setWidth(long value) {
-
-        width_ = value;
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>uint64 width = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearWidth() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        width_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>bytes data = 6;</code>
-       * @return The data.
-       */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getData() {
-        return data_;
-      }
-      /**
-       * <code>bytes data = 6;</code>
-       * @param value The data to set.
-       * @return This builder for chaining.
-       */
-      public Builder setData(com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        data_ = value;
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>bytes data = 6;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        data_ = getDefaultInstance().getData();
-        onChanged();
-        return this;
-      }
-      @java.lang.Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @java.lang.Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:trackmate.lacss.Result)
-    }
-
-    // @@protoc_insertion_point(class_scope:trackmate.lacss.Result)
-    private static final fiji.plugin.trackmate.lacss.LacssMsg.Result DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new fiji.plugin.trackmate.lacss.LacssMsg.Result();
-    }
-
-    public static fiji.plugin.trackmate.lacss.LacssMsg.Result getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<Result>
-        PARSER = new com.google.protobuf.AbstractParser<Result>() {
-      @java.lang.Override
-      public Result parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
-      }
-    };
-
-    public static com.google.protobuf.Parser<Result> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Result> getParserForType() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public fiji.plugin.trackmate.lacss.LacssMsg.Result getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1607,6 +995,78 @@ public final class LacssMsg {
       return new Settings();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Settings(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 13: {
+
+              minCellArea_ = input.readFloat();
+              break;
+            }
+            case 16: {
+
+              removeOutOfBound_ = input.readBool();
+              break;
+            }
+            case 29: {
+
+              scaling_ = input.readFloat();
+              break;
+            }
+            case 37: {
+
+              nmsIou_ = input.readFloat();
+              break;
+            }
+            case 45: {
+
+              detectionThreshold_ = input.readFloat();
+              break;
+            }
+            case 53: {
+
+              segmentationThreshold_ = input.readFloat();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Settings_descriptor;
@@ -1621,7 +1081,7 @@ public final class LacssMsg {
     }
 
     public static final int MIN_CELL_AREA_FIELD_NUMBER = 1;
-    private float minCellArea_ = 0F;
+    private float minCellArea_;
     /**
      * <code>float min_cell_area = 1;</code>
      * @return The minCellArea.
@@ -1632,7 +1092,7 @@ public final class LacssMsg {
     }
 
     public static final int REMOVE_OUT_OF_BOUND_FIELD_NUMBER = 2;
-    private boolean removeOutOfBound_ = false;
+    private boolean removeOutOfBound_;
     /**
      * <code>bool remove_out_of_bound = 2;</code>
      * @return The removeOutOfBound.
@@ -1643,7 +1103,7 @@ public final class LacssMsg {
     }
 
     public static final int SCALING_FIELD_NUMBER = 3;
-    private float scaling_ = 0F;
+    private float scaling_;
     /**
      * <code>float scaling = 3;</code>
      * @return The scaling.
@@ -1654,7 +1114,7 @@ public final class LacssMsg {
     }
 
     public static final int NMS_IOU_FIELD_NUMBER = 4;
-    private float nmsIou_ = 0F;
+    private float nmsIou_;
     /**
      * <code>float nms_iou = 4;</code>
      * @return The nmsIou.
@@ -1665,7 +1125,7 @@ public final class LacssMsg {
     }
 
     public static final int DETECTION_THRESHOLD_FIELD_NUMBER = 5;
-    private float detectionThreshold_ = 0F;
+    private float detectionThreshold_;
     /**
      * <code>float detection_threshold = 5;</code>
      * @return The detectionThreshold.
@@ -1676,7 +1136,7 @@ public final class LacssMsg {
     }
 
     public static final int SEGMENTATION_THRESHOLD_FIELD_NUMBER = 6;
-    private float segmentationThreshold_ = 0F;
+    private float segmentationThreshold_;
     /**
      * <code>float segmentation_threshold = 6;</code>
      * @return The segmentationThreshold.
@@ -1700,25 +1160,25 @@ public final class LacssMsg {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (java.lang.Float.floatToRawIntBits(minCellArea_) != 0) {
+      if (minCellArea_ != 0F) {
         output.writeFloat(1, minCellArea_);
       }
       if (removeOutOfBound_ != false) {
         output.writeBool(2, removeOutOfBound_);
       }
-      if (java.lang.Float.floatToRawIntBits(scaling_) != 0) {
+      if (scaling_ != 0F) {
         output.writeFloat(3, scaling_);
       }
-      if (java.lang.Float.floatToRawIntBits(nmsIou_) != 0) {
+      if (nmsIou_ != 0F) {
         output.writeFloat(4, nmsIou_);
       }
-      if (java.lang.Float.floatToRawIntBits(detectionThreshold_) != 0) {
+      if (detectionThreshold_ != 0F) {
         output.writeFloat(5, detectionThreshold_);
       }
-      if (java.lang.Float.floatToRawIntBits(segmentationThreshold_) != 0) {
+      if (segmentationThreshold_ != 0F) {
         output.writeFloat(6, segmentationThreshold_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -1727,7 +1187,7 @@ public final class LacssMsg {
       if (size != -1) return size;
 
       size = 0;
-      if (java.lang.Float.floatToRawIntBits(minCellArea_) != 0) {
+      if (minCellArea_ != 0F) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(1, minCellArea_);
       }
@@ -1735,23 +1195,23 @@ public final class LacssMsg {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(2, removeOutOfBound_);
       }
-      if (java.lang.Float.floatToRawIntBits(scaling_) != 0) {
+      if (scaling_ != 0F) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(3, scaling_);
       }
-      if (java.lang.Float.floatToRawIntBits(nmsIou_) != 0) {
+      if (nmsIou_ != 0F) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(4, nmsIou_);
       }
-      if (java.lang.Float.floatToRawIntBits(detectionThreshold_) != 0) {
+      if (detectionThreshold_ != 0F) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(5, detectionThreshold_);
       }
-      if (java.lang.Float.floatToRawIntBits(segmentationThreshold_) != 0) {
+      if (segmentationThreshold_ != 0F) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(6, segmentationThreshold_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1783,7 +1243,7 @@ public final class LacssMsg {
       if (java.lang.Float.floatToIntBits(getSegmentationThreshold())
           != java.lang.Float.floatToIntBits(
               other.getSegmentationThreshold())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -1812,7 +1272,7 @@ public final class LacssMsg {
       hash = (37 * hash) + SEGMENTATION_THRESHOLD_FIELD_NUMBER;
       hash = (53 * hash) + java.lang.Float.floatToIntBits(
           getSegmentationThreshold());
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1861,13 +1321,11 @@ public final class LacssMsg {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static fiji.plugin.trackmate.lacss.LacssMsg.Settings parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static fiji.plugin.trackmate.lacss.LacssMsg.Settings parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1931,24 +1389,34 @@ public final class LacssMsg {
 
       // Construct using fiji.plugin.trackmate.lacss.LacssMsg.Settings.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         minCellArea_ = 0F;
+
         removeOutOfBound_ = false;
+
         scaling_ = 0F;
+
         nmsIou_ = 0F;
+
         detectionThreshold_ = 0F;
+
         segmentationThreshold_ = 0F;
+
         return this;
       }
 
@@ -1975,31 +1443,14 @@ public final class LacssMsg {
       @java.lang.Override
       public fiji.plugin.trackmate.lacss.LacssMsg.Settings buildPartial() {
         fiji.plugin.trackmate.lacss.LacssMsg.Settings result = new fiji.plugin.trackmate.lacss.LacssMsg.Settings(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.minCellArea_ = minCellArea_;
+        result.removeOutOfBound_ = removeOutOfBound_;
+        result.scaling_ = scaling_;
+        result.nmsIou_ = nmsIou_;
+        result.detectionThreshold_ = detectionThreshold_;
+        result.segmentationThreshold_ = segmentationThreshold_;
         onBuilt();
         return result;
-      }
-
-      private void buildPartial0(fiji.plugin.trackmate.lacss.LacssMsg.Settings result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.minCellArea_ = minCellArea_;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.removeOutOfBound_ = removeOutOfBound_;
-        }
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.scaling_ = scaling_;
-        }
-        if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.nmsIou_ = nmsIou_;
-        }
-        if (((from_bitField0_ & 0x00000010) != 0)) {
-          result.detectionThreshold_ = detectionThreshold_;
-        }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
-          result.segmentationThreshold_ = segmentationThreshold_;
-        }
       }
 
       @java.lang.Override
@@ -2064,7 +1515,7 @@ public final class LacssMsg {
         if (other.getSegmentationThreshold() != 0F) {
           setSegmentationThreshold(other.getSegmentationThreshold());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -2079,63 +1530,19 @@ public final class LacssMsg {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        fiji.plugin.trackmate.lacss.LacssMsg.Settings parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 13: {
-                minCellArea_ = input.readFloat();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 13
-              case 16: {
-                removeOutOfBound_ = input.readBool();
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 16
-              case 29: {
-                scaling_ = input.readFloat();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 29
-              case 37: {
-                nmsIou_ = input.readFloat();
-                bitField0_ |= 0x00000008;
-                break;
-              } // case 37
-              case 45: {
-                detectionThreshold_ = input.readFloat();
-                bitField0_ |= 0x00000010;
-                break;
-              } // case 45
-              case 53: {
-                segmentationThreshold_ = input.readFloat();
-                bitField0_ |= 0x00000020;
-                break;
-              } // case 53
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (fiji.plugin.trackmate.lacss.LacssMsg.Settings) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private float minCellArea_ ;
       /**
@@ -2152,9 +1559,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setMinCellArea(float value) {
-
+        
         minCellArea_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2163,7 +1569,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearMinCellArea() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        
         minCellArea_ = 0F;
         onChanged();
         return this;
@@ -2184,9 +1590,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setRemoveOutOfBound(boolean value) {
-
+        
         removeOutOfBound_ = value;
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -2195,7 +1600,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearRemoveOutOfBound() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        
         removeOutOfBound_ = false;
         onChanged();
         return this;
@@ -2216,9 +1621,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setScaling(float value) {
-
+        
         scaling_ = value;
-        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -2227,7 +1631,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearScaling() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        
         scaling_ = 0F;
         onChanged();
         return this;
@@ -2248,9 +1652,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setNmsIou(float value) {
-
+        
         nmsIou_ = value;
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -2259,7 +1662,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearNmsIou() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        
         nmsIou_ = 0F;
         onChanged();
         return this;
@@ -2280,9 +1683,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setDetectionThreshold(float value) {
-
+        
         detectionThreshold_ = value;
-        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -2291,7 +1693,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearDetectionThreshold() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        
         detectionThreshold_ = 0F;
         onChanged();
         return this;
@@ -2312,9 +1714,8 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder setSegmentationThreshold(float value) {
-
+        
         segmentationThreshold_ = value;
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -2323,7 +1724,7 @@ public final class LacssMsg {
        * @return This builder for chaining.
        */
       public Builder clearSegmentationThreshold() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        
         segmentationThreshold_ = 0F;
         onChanged();
         return this;
@@ -2361,18 +1762,7 @@ public final class LacssMsg {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new Settings(input, extensionRegistry);
       }
     };
 
@@ -2448,6 +1838,74 @@ public final class LacssMsg {
       return new Input();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Input(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              fiji.plugin.trackmate.lacss.LacssMsg.Settings.Builder subBuilder = null;
+              if (settings_ != null) {
+                subBuilder = settings_.toBuilder();
+              }
+              settings_ = input.readMessage(fiji.plugin.trackmate.lacss.LacssMsg.Settings.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(settings_);
+                settings_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              fiji.plugin.trackmate.lacss.LacssMsg.Image.Builder subBuilder = null;
+              if (image_ != null) {
+                subBuilder = image_.toBuilder();
+              }
+              image_ = input.readMessage(fiji.plugin.trackmate.lacss.LacssMsg.Image.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(image_);
+                image_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Input_descriptor;
@@ -2461,7 +1919,6 @@ public final class LacssMsg {
               fiji.plugin.trackmate.lacss.LacssMsg.Input.class, fiji.plugin.trackmate.lacss.LacssMsg.Input.Builder.class);
     }
 
-    private int bitField0_;
     public static final int SETTINGS_FIELD_NUMBER = 1;
     private fiji.plugin.trackmate.lacss.LacssMsg.Settings settings_;
     /**
@@ -2470,7 +1927,7 @@ public final class LacssMsg {
      */
     @java.lang.Override
     public boolean hasSettings() {
-      return ((bitField0_ & 0x00000001) != 0);
+      return settings_ != null;
     }
     /**
      * <code>.trackmate.lacss.Settings settings = 1;</code>
@@ -2485,7 +1942,7 @@ public final class LacssMsg {
      */
     @java.lang.Override
     public fiji.plugin.trackmate.lacss.LacssMsg.SettingsOrBuilder getSettingsOrBuilder() {
-      return settings_ == null ? fiji.plugin.trackmate.lacss.LacssMsg.Settings.getDefaultInstance() : settings_;
+      return getSettings();
     }
 
     public static final int IMAGE_FIELD_NUMBER = 2;
@@ -2496,7 +1953,7 @@ public final class LacssMsg {
      */
     @java.lang.Override
     public boolean hasImage() {
-      return ((bitField0_ & 0x00000002) != 0);
+      return image_ != null;
     }
     /**
      * <code>.trackmate.lacss.Image image = 2;</code>
@@ -2511,7 +1968,7 @@ public final class LacssMsg {
      */
     @java.lang.Override
     public fiji.plugin.trackmate.lacss.LacssMsg.ImageOrBuilder getImageOrBuilder() {
-      return image_ == null ? fiji.plugin.trackmate.lacss.LacssMsg.Image.getDefaultInstance() : image_;
+      return getImage();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -2528,13 +1985,13 @@ public final class LacssMsg {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) != 0)) {
+      if (settings_ != null) {
         output.writeMessage(1, getSettings());
       }
-      if (((bitField0_ & 0x00000002) != 0)) {
+      if (image_ != null) {
         output.writeMessage(2, getImage());
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -2543,15 +2000,15 @@ public final class LacssMsg {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) != 0)) {
+      if (settings_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getSettings());
       }
-      if (((bitField0_ & 0x00000002) != 0)) {
+      if (image_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getImage());
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -2576,7 +2033,7 @@ public final class LacssMsg {
         if (!getImage()
             .equals(other.getImage())) return false;
       }
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -2595,7 +2052,7 @@ public final class LacssMsg {
         hash = (37 * hash) + IMAGE_FIELD_NUMBER;
         hash = (53 * hash) + getImage().hashCode();
       }
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -2644,13 +2101,11 @@ public final class LacssMsg {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static fiji.plugin.trackmate.lacss.LacssMsg.Input parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static fiji.plugin.trackmate.lacss.LacssMsg.Input parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2725,22 +2180,21 @@ public final class LacssMsg {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getSettingsFieldBuilder();
-          getImageFieldBuilder();
         }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
-        settings_ = null;
-        if (settingsBuilder_ != null) {
-          settingsBuilder_.dispose();
+        if (settingsBuilder_ == null) {
+          settings_ = null;
+        } else {
+          settings_ = null;
           settingsBuilder_ = null;
         }
-        image_ = null;
-        if (imageBuilder_ != null) {
-          imageBuilder_.dispose();
+        if (imageBuilder_ == null) {
+          image_ = null;
+        } else {
+          image_ = null;
           imageBuilder_ = null;
         }
         return this;
@@ -2769,27 +2223,18 @@ public final class LacssMsg {
       @java.lang.Override
       public fiji.plugin.trackmate.lacss.LacssMsg.Input buildPartial() {
         fiji.plugin.trackmate.lacss.LacssMsg.Input result = new fiji.plugin.trackmate.lacss.LacssMsg.Input(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        if (settingsBuilder_ == null) {
+          result.settings_ = settings_;
+        } else {
+          result.settings_ = settingsBuilder_.build();
+        }
+        if (imageBuilder_ == null) {
+          result.image_ = image_;
+        } else {
+          result.image_ = imageBuilder_.build();
+        }
         onBuilt();
         return result;
-      }
-
-      private void buildPartial0(fiji.plugin.trackmate.lacss.LacssMsg.Input result) {
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.settings_ = settingsBuilder_ == null
-              ? settings_
-              : settingsBuilder_.build();
-          to_bitField0_ |= 0x00000001;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.image_ = imageBuilder_ == null
-              ? image_
-              : imageBuilder_.build();
-          to_bitField0_ |= 0x00000002;
-        }
-        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -2842,7 +2287,7 @@ public final class LacssMsg {
         if (other.hasImage()) {
           mergeImage(other.getImage());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -2857,47 +2302,19 @@ public final class LacssMsg {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        fiji.plugin.trackmate.lacss.LacssMsg.Input parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                input.readMessage(
-                    getSettingsFieldBuilder().getBuilder(),
-                    extensionRegistry);
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              case 18: {
-                input.readMessage(
-                    getImageFieldBuilder().getBuilder(),
-                    extensionRegistry);
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 18
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (fiji.plugin.trackmate.lacss.LacssMsg.Input) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private fiji.plugin.trackmate.lacss.LacssMsg.Settings settings_;
       private com.google.protobuf.SingleFieldBuilderV3<
@@ -2907,7 +2324,7 @@ public final class LacssMsg {
        * @return Whether the settings field is set.
        */
       public boolean hasSettings() {
-        return ((bitField0_ & 0x00000001) != 0);
+        return settingsBuilder_ != null || settings_ != null;
       }
       /**
        * <code>.trackmate.lacss.Settings settings = 1;</code>
@@ -2929,11 +2346,11 @@ public final class LacssMsg {
             throw new NullPointerException();
           }
           settings_ = value;
+          onChanged();
         } else {
           settingsBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000001;
-        onChanged();
+
         return this;
       }
       /**
@@ -2943,11 +2360,11 @@ public final class LacssMsg {
           fiji.plugin.trackmate.lacss.LacssMsg.Settings.Builder builderForValue) {
         if (settingsBuilder_ == null) {
           settings_ = builderForValue.build();
+          onChanged();
         } else {
           settingsBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000001;
-        onChanged();
+
         return this;
       }
       /**
@@ -2955,40 +2372,38 @@ public final class LacssMsg {
        */
       public Builder mergeSettings(fiji.plugin.trackmate.lacss.LacssMsg.Settings value) {
         if (settingsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0) &&
-            settings_ != null &&
-            settings_ != fiji.plugin.trackmate.lacss.LacssMsg.Settings.getDefaultInstance()) {
-            getSettingsBuilder().mergeFrom(value);
+          if (settings_ != null) {
+            settings_ =
+              fiji.plugin.trackmate.lacss.LacssMsg.Settings.newBuilder(settings_).mergeFrom(value).buildPartial();
           } else {
             settings_ = value;
           }
+          onChanged();
         } else {
           settingsBuilder_.mergeFrom(value);
         }
-        if (settings_ != null) {
-          bitField0_ |= 0x00000001;
-          onChanged();
-        }
+
         return this;
       }
       /**
        * <code>.trackmate.lacss.Settings settings = 1;</code>
        */
       public Builder clearSettings() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        settings_ = null;
-        if (settingsBuilder_ != null) {
-          settingsBuilder_.dispose();
+        if (settingsBuilder_ == null) {
+          settings_ = null;
+          onChanged();
+        } else {
+          settings_ = null;
           settingsBuilder_ = null;
         }
-        onChanged();
+
         return this;
       }
       /**
        * <code>.trackmate.lacss.Settings settings = 1;</code>
        */
       public fiji.plugin.trackmate.lacss.LacssMsg.Settings.Builder getSettingsBuilder() {
-        bitField0_ |= 0x00000001;
+        
         onChanged();
         return getSettingsFieldBuilder().getBuilder();
       }
@@ -3028,7 +2443,7 @@ public final class LacssMsg {
        * @return Whether the image field is set.
        */
       public boolean hasImage() {
-        return ((bitField0_ & 0x00000002) != 0);
+        return imageBuilder_ != null || image_ != null;
       }
       /**
        * <code>.trackmate.lacss.Image image = 2;</code>
@@ -3050,11 +2465,11 @@ public final class LacssMsg {
             throw new NullPointerException();
           }
           image_ = value;
+          onChanged();
         } else {
           imageBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000002;
-        onChanged();
+
         return this;
       }
       /**
@@ -3064,11 +2479,11 @@ public final class LacssMsg {
           fiji.plugin.trackmate.lacss.LacssMsg.Image.Builder builderForValue) {
         if (imageBuilder_ == null) {
           image_ = builderForValue.build();
+          onChanged();
         } else {
           imageBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
-        onChanged();
+
         return this;
       }
       /**
@@ -3076,40 +2491,38 @@ public final class LacssMsg {
        */
       public Builder mergeImage(fiji.plugin.trackmate.lacss.LacssMsg.Image value) {
         if (imageBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) != 0) &&
-            image_ != null &&
-            image_ != fiji.plugin.trackmate.lacss.LacssMsg.Image.getDefaultInstance()) {
-            getImageBuilder().mergeFrom(value);
+          if (image_ != null) {
+            image_ =
+              fiji.plugin.trackmate.lacss.LacssMsg.Image.newBuilder(image_).mergeFrom(value).buildPartial();
           } else {
             image_ = value;
           }
+          onChanged();
         } else {
           imageBuilder_.mergeFrom(value);
         }
-        if (image_ != null) {
-          bitField0_ |= 0x00000002;
-          onChanged();
-        }
+
         return this;
       }
       /**
        * <code>.trackmate.lacss.Image image = 2;</code>
        */
       public Builder clearImage() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        image_ = null;
-        if (imageBuilder_ != null) {
-          imageBuilder_.dispose();
+        if (imageBuilder_ == null) {
+          image_ = null;
+          onChanged();
+        } else {
+          image_ = null;
           imageBuilder_ = null;
         }
-        onChanged();
+
         return this;
       }
       /**
        * <code>.trackmate.lacss.Image image = 2;</code>
        */
       public fiji.plugin.trackmate.lacss.LacssMsg.Image.Builder getImageBuilder() {
-        bitField0_ |= 0x00000002;
+        
         onChanged();
         return getImageFieldBuilder().getBuilder();
       }
@@ -3173,18 +2586,7 @@ public final class LacssMsg {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new Input(input, extensionRegistry);
       }
     };
 
@@ -3204,16 +2606,1469 @@ public final class LacssMsg {
 
   }
 
+  public interface LabelOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:trackmate.lacss.Label)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>uint64 height = 1;</code>
+     * @return The height.
+     */
+    long getHeight();
+
+    /**
+     * <code>uint64 width = 2;</code>
+     * @return The width.
+     */
+    long getWidth();
+
+    /**
+     * <code>bytes data = 6;</code>
+     * @return The data.
+     */
+    com.google.protobuf.ByteString getData();
+  }
+  /**
+   * Protobuf type {@code trackmate.lacss.Label}
+   */
+  public static final class Label extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:trackmate.lacss.Label)
+      LabelOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use Label.newBuilder() to construct.
+    private Label(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Label() {
+      data_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Label();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Label(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              height_ = input.readUInt64();
+              break;
+            }
+            case 16: {
+
+              width_ = input.readUInt64();
+              break;
+            }
+            case 50: {
+
+              data_ = input.readBytes();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Label_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Label_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.class, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder.class);
+    }
+
+    public static final int HEIGHT_FIELD_NUMBER = 1;
+    private long height_;
+    /**
+     * <code>uint64 height = 1;</code>
+     * @return The height.
+     */
+    @java.lang.Override
+    public long getHeight() {
+      return height_;
+    }
+
+    public static final int WIDTH_FIELD_NUMBER = 2;
+    private long width_;
+    /**
+     * <code>uint64 width = 2;</code>
+     * @return The width.
+     */
+    @java.lang.Override
+    public long getWidth() {
+      return width_;
+    }
+
+    public static final int DATA_FIELD_NUMBER = 6;
+    private com.google.protobuf.ByteString data_;
+    /**
+     * <code>bytes data = 6;</code>
+     * @return The data.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getData() {
+      return data_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (height_ != 0L) {
+        output.writeUInt64(1, height_);
+      }
+      if (width_ != 0L) {
+        output.writeUInt64(2, width_);
+      }
+      if (!data_.isEmpty()) {
+        output.writeBytes(6, data_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (height_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(1, height_);
+      }
+      if (width_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(2, width_);
+      }
+      if (!data_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, data_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof fiji.plugin.trackmate.lacss.LacssMsg.Label)) {
+        return super.equals(obj);
+      }
+      fiji.plugin.trackmate.lacss.LacssMsg.Label other = (fiji.plugin.trackmate.lacss.LacssMsg.Label) obj;
+
+      if (getHeight()
+          != other.getHeight()) return false;
+      if (getWidth()
+          != other.getWidth()) return false;
+      if (!getData()
+          .equals(other.getData())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getHeight());
+      hash = (37 * hash) + WIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getWidth());
+      hash = (37 * hash) + DATA_FIELD_NUMBER;
+      hash = (53 * hash) + getData().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(fiji.plugin.trackmate.lacss.LacssMsg.Label prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code trackmate.lacss.Label}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:trackmate.lacss.Label)
+        fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Label_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Label_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                fiji.plugin.trackmate.lacss.LacssMsg.Label.class, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder.class);
+      }
+
+      // Construct using fiji.plugin.trackmate.lacss.LacssMsg.Label.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        height_ = 0L;
+
+        width_ = 0L;
+
+        data_ = com.google.protobuf.ByteString.EMPTY;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Label_descriptor;
+      }
+
+      @java.lang.Override
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label getDefaultInstanceForType() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label build() {
+        fiji.plugin.trackmate.lacss.LacssMsg.Label result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label buildPartial() {
+        fiji.plugin.trackmate.lacss.LacssMsg.Label result = new fiji.plugin.trackmate.lacss.LacssMsg.Label(this);
+        result.height_ = height_;
+        result.width_ = width_;
+        result.data_ = data_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof fiji.plugin.trackmate.lacss.LacssMsg.Label) {
+          return mergeFrom((fiji.plugin.trackmate.lacss.LacssMsg.Label)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(fiji.plugin.trackmate.lacss.LacssMsg.Label other) {
+        if (other == fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance()) return this;
+        if (other.getHeight() != 0L) {
+          setHeight(other.getHeight());
+        }
+        if (other.getWidth() != 0L) {
+          setWidth(other.getWidth());
+        }
+        if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
+          setData(other.getData());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        fiji.plugin.trackmate.lacss.LacssMsg.Label parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (fiji.plugin.trackmate.lacss.LacssMsg.Label) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long height_ ;
+      /**
+       * <code>uint64 height = 1;</code>
+       * @return The height.
+       */
+      @java.lang.Override
+      public long getHeight() {
+        return height_;
+      }
+      /**
+       * <code>uint64 height = 1;</code>
+       * @param value The height to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHeight(long value) {
+        
+        height_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint64 height = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHeight() {
+        
+        height_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private long width_ ;
+      /**
+       * <code>uint64 width = 2;</code>
+       * @return The width.
+       */
+      @java.lang.Override
+      public long getWidth() {
+        return width_;
+      }
+      /**
+       * <code>uint64 width = 2;</code>
+       * @param value The width to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWidth(long value) {
+        
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>uint64 width = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearWidth() {
+        
+        width_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes data = 6;</code>
+       * @return The data.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getData() {
+        return data_;
+      }
+      /**
+       * <code>bytes data = 6;</code>
+       * @param value The data to set.
+       * @return This builder for chaining.
+       */
+      public Builder setData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        data_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes data = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearData() {
+        
+        data_ = getDefaultInstance().getData();
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:trackmate.lacss.Label)
+    }
+
+    // @@protoc_insertion_point(class_scope:trackmate.lacss.Label)
+    private static final fiji.plugin.trackmate.lacss.LacssMsg.Label DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new fiji.plugin.trackmate.lacss.LacssMsg.Label();
+    }
+
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Label getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Label>
+        PARSER = new com.google.protobuf.AbstractParser<Label>() {
+      @java.lang.Override
+      public Label parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Label(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Label> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Label> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public fiji.plugin.trackmate.lacss.LacssMsg.Label getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ResultOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:trackmate.lacss.Result)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.trackmate.lacss.Label score = 1;</code>
+     * @return Whether the score field is set.
+     */
+    boolean hasScore();
+    /**
+     * <code>.trackmate.lacss.Label score = 1;</code>
+     * @return The score.
+     */
+    fiji.plugin.trackmate.lacss.LacssMsg.Label getScore();
+    /**
+     * <code>.trackmate.lacss.Label score = 1;</code>
+     */
+    fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder getScoreOrBuilder();
+
+    /**
+     * <code>.trackmate.lacss.Label label = 2;</code>
+     * @return Whether the label field is set.
+     */
+    boolean hasLabel();
+    /**
+     * <code>.trackmate.lacss.Label label = 2;</code>
+     * @return The label.
+     */
+    fiji.plugin.trackmate.lacss.LacssMsg.Label getLabel();
+    /**
+     * <code>.trackmate.lacss.Label label = 2;</code>
+     */
+    fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder getLabelOrBuilder();
+  }
+  /**
+   * Protobuf type {@code trackmate.lacss.Result}
+   */
+  public static final class Result extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:trackmate.lacss.Result)
+      ResultOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use Result.newBuilder() to construct.
+    private Result(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Result() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Result();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Result(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder subBuilder = null;
+              if (score_ != null) {
+                subBuilder = score_.toBuilder();
+              }
+              score_ = input.readMessage(fiji.plugin.trackmate.lacss.LacssMsg.Label.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(score_);
+                score_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder subBuilder = null;
+              if (label_ != null) {
+                subBuilder = label_.toBuilder();
+              }
+              label_ = input.readMessage(fiji.plugin.trackmate.lacss.LacssMsg.Label.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(label_);
+                label_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              fiji.plugin.trackmate.lacss.LacssMsg.Result.class, fiji.plugin.trackmate.lacss.LacssMsg.Result.Builder.class);
+    }
+
+    public static final int SCORE_FIELD_NUMBER = 1;
+    private fiji.plugin.trackmate.lacss.LacssMsg.Label score_;
+    /**
+     * <code>.trackmate.lacss.Label score = 1;</code>
+     * @return Whether the score field is set.
+     */
+    @java.lang.Override
+    public boolean hasScore() {
+      return score_ != null;
+    }
+    /**
+     * <code>.trackmate.lacss.Label score = 1;</code>
+     * @return The score.
+     */
+    @java.lang.Override
+    public fiji.plugin.trackmate.lacss.LacssMsg.Label getScore() {
+      return score_ == null ? fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance() : score_;
+    }
+    /**
+     * <code>.trackmate.lacss.Label score = 1;</code>
+     */
+    @java.lang.Override
+    public fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder getScoreOrBuilder() {
+      return getScore();
+    }
+
+    public static final int LABEL_FIELD_NUMBER = 2;
+    private fiji.plugin.trackmate.lacss.LacssMsg.Label label_;
+    /**
+     * <code>.trackmate.lacss.Label label = 2;</code>
+     * @return Whether the label field is set.
+     */
+    @java.lang.Override
+    public boolean hasLabel() {
+      return label_ != null;
+    }
+    /**
+     * <code>.trackmate.lacss.Label label = 2;</code>
+     * @return The label.
+     */
+    @java.lang.Override
+    public fiji.plugin.trackmate.lacss.LacssMsg.Label getLabel() {
+      return label_ == null ? fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance() : label_;
+    }
+    /**
+     * <code>.trackmate.lacss.Label label = 2;</code>
+     */
+    @java.lang.Override
+    public fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder getLabelOrBuilder() {
+      return getLabel();
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (score_ != null) {
+        output.writeMessage(1, getScore());
+      }
+      if (label_ != null) {
+        output.writeMessage(2, getLabel());
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (score_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getScore());
+      }
+      if (label_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getLabel());
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof fiji.plugin.trackmate.lacss.LacssMsg.Result)) {
+        return super.equals(obj);
+      }
+      fiji.plugin.trackmate.lacss.LacssMsg.Result other = (fiji.plugin.trackmate.lacss.LacssMsg.Result) obj;
+
+      if (hasScore() != other.hasScore()) return false;
+      if (hasScore()) {
+        if (!getScore()
+            .equals(other.getScore())) return false;
+      }
+      if (hasLabel() != other.hasLabel()) return false;
+      if (hasLabel()) {
+        if (!getLabel()
+            .equals(other.getLabel())) return false;
+      }
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasScore()) {
+        hash = (37 * hash) + SCORE_FIELD_NUMBER;
+        hash = (53 * hash) + getScore().hashCode();
+      }
+      if (hasLabel()) {
+        hash = (37 * hash) + LABEL_FIELD_NUMBER;
+        hash = (53 * hash) + getLabel().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(fiji.plugin.trackmate.lacss.LacssMsg.Result prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code trackmate.lacss.Result}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:trackmate.lacss.Result)
+        fiji.plugin.trackmate.lacss.LacssMsg.ResultOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                fiji.plugin.trackmate.lacss.LacssMsg.Result.class, fiji.plugin.trackmate.lacss.LacssMsg.Result.Builder.class);
+      }
+
+      // Construct using fiji.plugin.trackmate.lacss.LacssMsg.Result.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        if (scoreBuilder_ == null) {
+          score_ = null;
+        } else {
+          score_ = null;
+          scoreBuilder_ = null;
+        }
+        if (labelBuilder_ == null) {
+          label_ = null;
+        } else {
+          label_ = null;
+          labelBuilder_ = null;
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.internal_static_trackmate_lacss_Result_descriptor;
+      }
+
+      @java.lang.Override
+      public fiji.plugin.trackmate.lacss.LacssMsg.Result getDefaultInstanceForType() {
+        return fiji.plugin.trackmate.lacss.LacssMsg.Result.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public fiji.plugin.trackmate.lacss.LacssMsg.Result build() {
+        fiji.plugin.trackmate.lacss.LacssMsg.Result result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public fiji.plugin.trackmate.lacss.LacssMsg.Result buildPartial() {
+        fiji.plugin.trackmate.lacss.LacssMsg.Result result = new fiji.plugin.trackmate.lacss.LacssMsg.Result(this);
+        if (scoreBuilder_ == null) {
+          result.score_ = score_;
+        } else {
+          result.score_ = scoreBuilder_.build();
+        }
+        if (labelBuilder_ == null) {
+          result.label_ = label_;
+        } else {
+          result.label_ = labelBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof fiji.plugin.trackmate.lacss.LacssMsg.Result) {
+          return mergeFrom((fiji.plugin.trackmate.lacss.LacssMsg.Result)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(fiji.plugin.trackmate.lacss.LacssMsg.Result other) {
+        if (other == fiji.plugin.trackmate.lacss.LacssMsg.Result.getDefaultInstance()) return this;
+        if (other.hasScore()) {
+          mergeScore(other.getScore());
+        }
+        if (other.hasLabel()) {
+          mergeLabel(other.getLabel());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        fiji.plugin.trackmate.lacss.LacssMsg.Result parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (fiji.plugin.trackmate.lacss.LacssMsg.Result) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private fiji.plugin.trackmate.lacss.LacssMsg.Label score_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          fiji.plugin.trackmate.lacss.LacssMsg.Label, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder, fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder> scoreBuilder_;
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       * @return Whether the score field is set.
+       */
+      public boolean hasScore() {
+        return scoreBuilder_ != null || score_ != null;
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       * @return The score.
+       */
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label getScore() {
+        if (scoreBuilder_ == null) {
+          return score_ == null ? fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance() : score_;
+        } else {
+          return scoreBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      public Builder setScore(fiji.plugin.trackmate.lacss.LacssMsg.Label value) {
+        if (scoreBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          score_ = value;
+          onChanged();
+        } else {
+          scoreBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      public Builder setScore(
+          fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder builderForValue) {
+        if (scoreBuilder_ == null) {
+          score_ = builderForValue.build();
+          onChanged();
+        } else {
+          scoreBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      public Builder mergeScore(fiji.plugin.trackmate.lacss.LacssMsg.Label value) {
+        if (scoreBuilder_ == null) {
+          if (score_ != null) {
+            score_ =
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.newBuilder(score_).mergeFrom(value).buildPartial();
+          } else {
+            score_ = value;
+          }
+          onChanged();
+        } else {
+          scoreBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      public Builder clearScore() {
+        if (scoreBuilder_ == null) {
+          score_ = null;
+          onChanged();
+        } else {
+          score_ = null;
+          scoreBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder getScoreBuilder() {
+        
+        onChanged();
+        return getScoreFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      public fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder getScoreOrBuilder() {
+        if (scoreBuilder_ != null) {
+          return scoreBuilder_.getMessageOrBuilder();
+        } else {
+          return score_ == null ?
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance() : score_;
+        }
+      }
+      /**
+       * <code>.trackmate.lacss.Label score = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          fiji.plugin.trackmate.lacss.LacssMsg.Label, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder, fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder> 
+          getScoreFieldBuilder() {
+        if (scoreBuilder_ == null) {
+          scoreBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              fiji.plugin.trackmate.lacss.LacssMsg.Label, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder, fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder>(
+                  getScore(),
+                  getParentForChildren(),
+                  isClean());
+          score_ = null;
+        }
+        return scoreBuilder_;
+      }
+
+      private fiji.plugin.trackmate.lacss.LacssMsg.Label label_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          fiji.plugin.trackmate.lacss.LacssMsg.Label, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder, fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder> labelBuilder_;
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       * @return Whether the label field is set.
+       */
+      public boolean hasLabel() {
+        return labelBuilder_ != null || label_ != null;
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       * @return The label.
+       */
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label getLabel() {
+        if (labelBuilder_ == null) {
+          return label_ == null ? fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance() : label_;
+        } else {
+          return labelBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      public Builder setLabel(fiji.plugin.trackmate.lacss.LacssMsg.Label value) {
+        if (labelBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          label_ = value;
+          onChanged();
+        } else {
+          labelBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      public Builder setLabel(
+          fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder builderForValue) {
+        if (labelBuilder_ == null) {
+          label_ = builderForValue.build();
+          onChanged();
+        } else {
+          labelBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      public Builder mergeLabel(fiji.plugin.trackmate.lacss.LacssMsg.Label value) {
+        if (labelBuilder_ == null) {
+          if (label_ != null) {
+            label_ =
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.newBuilder(label_).mergeFrom(value).buildPartial();
+          } else {
+            label_ = value;
+          }
+          onChanged();
+        } else {
+          labelBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      public Builder clearLabel() {
+        if (labelBuilder_ == null) {
+          label_ = null;
+          onChanged();
+        } else {
+          label_ = null;
+          labelBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      public fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder getLabelBuilder() {
+        
+        onChanged();
+        return getLabelFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      public fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder getLabelOrBuilder() {
+        if (labelBuilder_ != null) {
+          return labelBuilder_.getMessageOrBuilder();
+        } else {
+          return label_ == null ?
+              fiji.plugin.trackmate.lacss.LacssMsg.Label.getDefaultInstance() : label_;
+        }
+      }
+      /**
+       * <code>.trackmate.lacss.Label label = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          fiji.plugin.trackmate.lacss.LacssMsg.Label, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder, fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder> 
+          getLabelFieldBuilder() {
+        if (labelBuilder_ == null) {
+          labelBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              fiji.plugin.trackmate.lacss.LacssMsg.Label, fiji.plugin.trackmate.lacss.LacssMsg.Label.Builder, fiji.plugin.trackmate.lacss.LacssMsg.LabelOrBuilder>(
+                  getLabel(),
+                  getParentForChildren(),
+                  isClean());
+          label_ = null;
+        }
+        return labelBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:trackmate.lacss.Result)
+    }
+
+    // @@protoc_insertion_point(class_scope:trackmate.lacss.Result)
+    private static final fiji.plugin.trackmate.lacss.LacssMsg.Result DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new fiji.plugin.trackmate.lacss.LacssMsg.Result();
+    }
+
+    public static fiji.plugin.trackmate.lacss.LacssMsg.Result getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Result>
+        PARSER = new com.google.protobuf.AbstractParser<Result>() {
+      @java.lang.Override
+      public Result parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Result(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Result> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Result> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public fiji.plugin.trackmate.lacss.LacssMsg.Result getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_trackmate_lacss_Image_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_trackmate_lacss_Image_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_trackmate_lacss_Result_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_trackmate_lacss_Result_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_trackmate_lacss_Settings_descriptor;
   private static final 
@@ -3224,6 +4079,16 @@ public final class LacssMsg {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_trackmate_lacss_Input_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_trackmate_lacss_Label_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_trackmate_lacss_Label_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_trackmate_lacss_Result_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_trackmate_lacss_Result_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3236,16 +4101,19 @@ public final class LacssMsg {
       "\n\013lacss.proto\022\017trackmate.lacss\"l\n\005Image\022" +
       "\016\n\006height\030\001 \001(\004\022\r\n\005width\030\002 \001(\004\022\017\n\007channe" +
       "l\030\003 \001(\004\022%\n\005dtype\030\004 \001(\0162\026.trackmate.lacss" +
-      ".DType\022\014\n\004data\030\005 \001(\014\"5\n\006Result\022\016\n\006height" +
-      "\030\001 \001(\004\022\r\n\005width\030\002 \001(\004\022\014\n\004data\030\006 \001(\014\"\235\001\n\010" +
-      "Settings\022\025\n\rmin_cell_area\030\001 \001(\002\022\033\n\023remov" +
-      "e_out_of_bound\030\002 \001(\010\022\017\n\007scaling\030\003 \001(\002\022\017\n" +
-      "\007nms_iou\030\004 \001(\002\022\033\n\023detection_threshold\030\005 " +
-      "\001(\002\022\036\n\026segmentation_threshold\030\006 \001(\002\"[\n\005I" +
-      "nput\022+\n\010settings\030\001 \001(\0132\031.trackmate.lacss" +
-      ".Settings\022%\n\005image\030\002 \001(\0132\026.trackmate.lac" +
-      "ss.Image*\024\n\005DType\022\013\n\007FLOAT32\020\000B\'\n\033fiji.p" +
-      "lugin.trackmate.lacssB\010LacssMsgb\006proto3"
+      ".DType\022\014\n\004data\030\005 \001(\014\"\235\001\n\010Settings\022\025\n\rmin" +
+      "_cell_area\030\001 \001(\002\022\033\n\023remove_out_of_bound\030" +
+      "\002 \001(\010\022\017\n\007scaling\030\003 \001(\002\022\017\n\007nms_iou\030\004 \001(\002\022" +
+      "\033\n\023detection_threshold\030\005 \001(\002\022\036\n\026segmenta" +
+      "tion_threshold\030\006 \001(\002\"[\n\005Input\022+\n\010setting" +
+      "s\030\001 \001(\0132\031.trackmate.lacss.Settings\022%\n\005im" +
+      "age\030\002 \001(\0132\026.trackmate.lacss.Image\"4\n\005Lab" +
+      "el\022\016\n\006height\030\001 \001(\004\022\r\n\005width\030\002 \001(\004\022\014\n\004dat" +
+      "a\030\006 \001(\014\"V\n\006Result\022%\n\005score\030\001 \001(\0132\026.track" +
+      "mate.lacss.Label\022%\n\005label\030\002 \001(\0132\026.trackm" +
+      "ate.lacss.Label*\024\n\005DType\022\013\n\007FLOAT32\020\000B\'\n" +
+      "\033fiji.plugin.trackmate.lacssB\010LacssMsgb\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -3257,24 +4125,30 @@ public final class LacssMsg {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_trackmate_lacss_Image_descriptor,
         new java.lang.String[] { "Height", "Width", "Channel", "Dtype", "Data", });
-    internal_static_trackmate_lacss_Result_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_trackmate_lacss_Result_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_trackmate_lacss_Result_descriptor,
-        new java.lang.String[] { "Height", "Width", "Data", });
     internal_static_trackmate_lacss_Settings_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_trackmate_lacss_Settings_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_trackmate_lacss_Settings_descriptor,
         new java.lang.String[] { "MinCellArea", "RemoveOutOfBound", "Scaling", "NmsIou", "DetectionThreshold", "SegmentationThreshold", });
     internal_static_trackmate_lacss_Input_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_trackmate_lacss_Input_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_trackmate_lacss_Input_descriptor,
         new java.lang.String[] { "Settings", "Image", });
+    internal_static_trackmate_lacss_Label_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_trackmate_lacss_Label_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_trackmate_lacss_Label_descriptor,
+        new java.lang.String[] { "Height", "Width", "Data", });
+    internal_static_trackmate_lacss_Result_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_trackmate_lacss_Result_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_trackmate_lacss_Result_descriptor,
+        new java.lang.String[] { "Score", "Label", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
