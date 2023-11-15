@@ -2,10 +2,11 @@
 
 Goal to add [Lacss](https://github.com/jiyuuchc/lacss ) detector to the Trackmate-Cellpose Plugin for [Fiji](https://imagej.net/software/fiji/downloads)
 
-
 ##### Installation
 
 Lacss utilizes a deep-learning library named [JAX](https://github.com/google/jax). JAX, while operational with only a CPU limits the computation power. GPUs (NVIDIA) or TPU are recommended especially with large datasets. 
+
+TPU Server-Client is not currently supported.
 
 #### Nvidia GPUs 
 
@@ -15,7 +16,7 @@ Linux-users can likely skip to PIP installations as JAX provides wheels for Cuda
 
 [Nvidia-smi](https://cdn.discordapp.com/attachments/1112582233463722014/1174251896001798144/image.png?ex=6566ea4c&is=6554754c&hm=358a17e849a9d7cb262b5f4af36ae6d76257695cfbb104ae04856b04105db18d&)
 
-NVIDIA Drivers may need to be updated first may be best to check ![here](https://www.nvidia.com/Download/index.aspx?lang=en-us) or automaticaly update with NIVIDA Geforce Experience 
+NVIDIA Drivers may need to be updated first may be best to check [here](https://www.nvidia.com/Download/index.aspx?lang=en-us) or automaticaly update with NIVIDA Geforce Experience 
 
 ### Linux Based OS
 
