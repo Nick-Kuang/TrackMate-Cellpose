@@ -14,7 +14,7 @@ Jax requires the prior installation of CUDA and CUDNN drivers for proper functio
 
 Linux-users can likely skip to PIP installations as JAX provides wheels for Cuda and CUDNN installations. 
 
-[Nvidia-smi](https://cdn.discordapp.com/attachments/1112582233463722014/1174251896001798144/image.png?ex=6566ea4c&is=6554754c&hm=358a17e849a9d7cb262b5f4af36ae6d76257695cfbb104ae04856b04105db18d&)
+![Nvidia-smi](https://cdn.discordapp.com/attachments/1112582233463722014/1174251896001798144/image.png?ex=6566ea4c&is=6554754c&hm=358a17e849a9d7cb262b5f4af36ae6d76257695cfbb104ae04856b04105db18d&)
 
 NVIDIA Drivers may need to be updated first may be best to check [here](https://www.nvidia.com/Download/index.aspx?lang=en-us) or automaticaly update with NIVIDA Geforce Experience 
 
@@ -40,17 +40,17 @@ There is a python script(lacss_testgpu.py) provided and button in the GUI to det
 
 ### Windows
 
-JAX is only supports CPU for windows offically. Instead a community project/wheel is used in order to use GPU on Windows
+JAX only supports CPU for windows offically. A community project is used in order to use GPU on Windows
 
 Manual installation of CUDA and CUDNN is required.  
 
 [Cuda](https://developer.nvidia.com/cuda-downloads) must be installed first before [CUDNN](https://developer.nvidia.com/cudnn).
 
-Follow the CUDNN Installation guide at the oficcal Nvidia [docs](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html)(Section 2.3) or follow this stackoverflow ![guide](https://stackoverflow.com/questions/31326015/how-to-verify-cudnn-installation)
+Follow the CUDNN Installation guide from the offical NVIDIA [docs](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html)(Section 2.3) or follow this ![guide](https://stackoverflow.com/questions/31326015/how-to-verify-cudnn-installation)
 
-Following CUDA and CUDNN installation is package installations which is done from the [community](https://github.com/cloudhan/jax-windows-builder) windows jax:
+Post CUDA and CUDNN install, the Jax/jaxlib can be via the [community](https://github.com/cloudhan/jax-windows-builder) supported windows-jax:
 
-Everything below is reccomdned to be completed in a virtual environment.
+Everything below is recommended to be completed in a virtual environment.
 
 If CUDA version is CUDA 11:
 **Downgrading jax maybe be required (untested)**
