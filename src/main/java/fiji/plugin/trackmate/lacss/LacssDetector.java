@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.scijava.Cancelable;
-
 import com.google.protobuf.ByteString;
 
 import fiji.plugin.trackmate.Logger;
@@ -35,7 +33,7 @@ import net.imglib2.type.numeric.integer.ShortType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 
-public class LacssDetector<T extends RealType<T> & NativeType<T>> implements SpotDetector<T>, Cancelable {
+public class LacssDetector<T extends RealType<T> & NativeType<T>> implements SpotDetector<T> {
 	private final static String BASE_ERROR_MESSAGE = "LacssDetector: ";
 
 	protected final ImgPlus<T> img;
@@ -57,9 +55,9 @@ public class LacssDetector<T extends RealType<T> & NativeType<T>> implements Spo
 
 	protected List<Spot> spots;
 
-	private String cancelReason;
+	// private String cancelReason;
 
-	private boolean isCanceled;
+	// private boolean isCanceled;
 
 	public LacssDetector(
 			final ImgPlus<T> img,
@@ -108,7 +106,24 @@ public class LacssDetector<T extends RealType<T> & NativeType<T>> implements Spo
 		msg.writeTo(st);
 	}
 
-	protected ArrayImg<ShortType, ShortArray> readResult(DataInputStream st) throws IOException {
+	protected Img<ShortType> getImgFromMsg(LacssMsg.Label msg)
+	{
+		long height = msg.getHeight();
+		long width = msg.getWidth();
+
+		long[] dims = new long[] { height, width };
+		short[] data = new short[(int) (height * width)];
+
+		msg.getData().asReadOnlyByteBuffer().asShortBuffer().get(data);
+
+		ArrayImg<ShortType, ShortArray> label = ArrayImgs.shorts(data, dims);
+
+		return label;
+	}
+
+	protected List<Spot> readResult(DataInputStream st) throws IOException {
+		final double[] calibration = TMUtils.getSpatialCalibration(img);
+
 		int msg_size = st.readInt();
 
 		byte[] msg_buf = new byte[msg_size];
@@ -117,13 +132,23 @@ public class LacssDetector<T extends RealType<T> & NativeType<T>> implements Spo
 
 		LacssMsg.Result msg = LacssMsg.Result.parseFrom(msg_buf);
 
-		long[] dims = new long[] { msg.getWidth(), msg.getHeight() };
-		short[] data = new short[(int) msg.getHeight() * (int) msg.getWidth()];
-		msg.getData().asReadOnlyByteBuffer().asShortBuffer().get(data);
+		Img<ShortType> label_img = getImgFromMsg(msg.getLabel());
+		Img<ShortType> score_img = getImgFromMsg(msg.getScore());
 
-		ArrayImg<ShortType, ShortArray> label = ArrayImgs.shorts(data, dims);
+		final AtomicInteger max = new AtomicInteger(0);
+		Views.iterable(label_img).forEach(p -> {
+			final int val = p.getInteger();
+			if (val != 0 && val > max.get())
+				max.set(val);
+		});
+		final List<Integer> indices = new ArrayList<>(max.get());
+		for (int i = 0; i < max.get(); i++)
+			indices.add(Integer.valueOf(i + 1));
 
-		return label;
+		final ImgLabeling<Integer, ShortType> labeling = ImgLabeling.fromImageAndLabels(label_img, indices);
+		spots = MaskUtils.fromLabelingWithROI(labeling, interval, calibration, false, score_img);
+
+		return spots;
 	}
 
 	private float getFloat(String key)
@@ -132,7 +157,7 @@ public class LacssDetector<T extends RealType<T> & NativeType<T>> implements Spo
 		return v.floatValue();
 	}
 
-	protected ArrayImg<ShortType, ShortArray> processFrame(RandomAccessibleInterval<T> frame, DataInputStream p_in,
+	protected void processFrame(RandomAccessibleInterval<T> frame, DataInputStream p_in,
 			DataOutputStream p_out) throws IOException {
 
 		LacssMsg.Settings settingMsg = LacssMsg.Settings.newBuilder()
@@ -145,40 +170,23 @@ public class LacssDetector<T extends RealType<T> & NativeType<T>> implements Spo
 			.build();
 
 		writeInput(p_out, frame, settingMsg);
-		ArrayImg<ShortType, ShortArray> label = readResult(p_in); // blocking
-
-		return label;
+		spots = readResult(p_in); // blocking
 	}
 
 	@Override
 	public boolean process() {
 		final long start = System.currentTimeMillis();
-		final double[] calibration = TMUtils.getSpatialCalibration(img);
 
-		isCanceled = false;
-		cancelReason = null;
+		// isCanceled = false;
+		// cancelReason = null;
 
 		DataOutputStream p_out = new DataOutputStream(pyServer.getOutputStream());
 		DataInputStream p_in = new DataInputStream(pyServer.getInputStream());
 
 		final RandomAccessibleInterval<T> rai = Views.interval(img, interval);
-		final Img<ShortType> label;
 
 		try {
-			label = processFrame(rai, p_in, p_out);
-
-			final AtomicInteger max = new AtomicInteger(0);
-			Views.iterable(label).forEach(p -> {
-				final int val = p.getInteger();
-				if (val != 0 && val > max.get())
-					max.set(val);
-			});
-			final List<Integer> indices = new ArrayList<>(max.get());
-			for (int i = 0; i < max.get(); i++)
-				indices.add(Integer.valueOf(i + 1));
-
-			final ImgLabeling<Integer, ShortType> labeling = ImgLabeling.fromImageAndLabels(label, indices);
-			spots = MaskUtils.fromLabelingWithROI(labeling, interval, calibration, false, null);
+			processFrame(rai, p_in, p_out);
 		} catch (IOException e) {
 			errorMessage = e.getLocalizedMessage();
 			return false;
@@ -224,19 +232,19 @@ public class LacssDetector<T extends RealType<T> & NativeType<T>> implements Spo
 
 	// --- org.scijava.Cancelable methods ---
 
-	@Override
-	public boolean isCanceled() {
-		return isCanceled;
-	}
+	// @Override
+	// public boolean isCanceled() {
+	// 	return isCanceled;
+	// }
 
-	@Override
-	public void cancel(final String reason) {
-		isCanceled = true;
-		cancelReason = reason;
-	}
+	// @Override
+	// public void cancel(final String reason) {
+	// 	isCanceled = true;
+	// 	cancelReason = reason;
+	// }
 
-	@Override
-	public String getCancelReason() {
-		return cancelReason;
-	}
+	// @Override
+	// public String getCancelReason() {
+	// 	return cancelReason;
+	// }
 }

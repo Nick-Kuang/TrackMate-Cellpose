@@ -13,25 +13,6 @@ import net.imglib2.Interval;
 
 public class LacssUtils 
 {
-
-	// public static < T extends Type< T > > ImgPlus< T > hyperSlice( final ImgPlus< T > img, final long frame )
-	// {
-	// 	final int timeDim = img.dimensionIndex( Axes.TIME );
-	// 	final ImgPlus< T > imgTC = timeDim < 0
-	// 			? img
-	// 			: ImgPlusViews.hyperSlice( img, timeDim, frame );
-
-	// 	// Squeeze Z dimension if its size is 1.
-	// 	final int zDim = imgTC.dimensionIndex( Axes.Z );
-	// 	final ImgPlus< T > imgTCZ;
-	// 	if ( zDim >= 0 && imgTC.dimension( zDim ) <= 1 )
-	// 		imgTCZ = ImgPlusViews.hyperSlice( imgTC, zDim, imgTC.min( zDim ) );
-	// 	else
-	// 		imgTCZ = imgTC;
-
-	// 	return imgTCZ;
-	// }
-
 	public static URL getResource( final String name )
 	{
 		return LacssDetectorFactory.class.getResource( name );
